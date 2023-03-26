@@ -5,13 +5,17 @@ import {
   useWindowDimensions,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {CustomTypes} from '../../util';
+import {AuthContext} from '../../context/AuthContext';
+import {AuthContextType} from '../../util/enums';
+import axios from 'axios';
+import {BASE_URL} from '../../config';
 
-const SignUpScreen = () => {
+const SignUpScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -19,12 +23,30 @@ const SignUpScreen = () => {
 
   const {height} = useWindowDimensions();
 
-  const onRegisterPressed = () => {
-    console.warn('onRegisterPressed');
-  };
+  // const {onRegister} = useContext(AuthContext) as AuthContextType;
 
-  const onLoginePressed = () => {
-    console.warn('onLoginePressed');
+  const onRegister = (
+    username: string,
+    email: string,
+    password: string,
+    passwordConfirmation: string,
+  ) => {
+    console.log('on register');
+
+    axios
+      .post(`${BASE_URL}/auth/register`, {
+        username,
+        email,
+        password,
+        passwordConfirmation,
+      })
+      .then(res => {
+        let user = res.data;
+        console.log(user);
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
 
   return (
@@ -55,10 +77,13 @@ const SignUpScreen = () => {
           isPassword
         />
 
-        <CustomButton onPress={onRegisterPressed} text="Register" />
+        <CustomButton
+          onPress={() => onRegister(username, email, password, confirmPassword)}
+          text="Register"
+        />
 
         <CustomButton
-          onPress={onLoginePressed}
+          onPress={() => navigation.push('SignIn')}
           text="Have an account? Login here!"
           type={CustomTypes.TERTIARY}
         />

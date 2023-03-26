@@ -16,6 +16,12 @@ Follow along on the this [link](https://reactnative.dev/docs/environment-setup)
 
 React Native [documentation](https://reactnative.dev/)
 
+#### React Navigation
+
+For navigation of screens we are using [React Navigation](https://reactnavigation.org/docs/getting-started/)
+
+Specifically we are using [Native Stack Navigator](https://reactnavigation.org/docs/native-stack-navigator/)
+
 #### Wireframe
 
 Designe of screens [here](https://www.figma.com/file/HNEPUxCzjilcApUuSZhSc2/Untitled?node-id=0-1)

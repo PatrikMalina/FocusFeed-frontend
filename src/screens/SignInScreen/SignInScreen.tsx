@@ -5,18 +5,18 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {CustomTypes} from '../../util';
 
-function SignInScreen() {
+function SignInScreen({navigation}: any) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const {height} = useWindowDimensions();
 
-  const onSignInPressed = () => {
-    console.warn('Sign in');
+  const onForgotPassword = () => {
+    console.warn('onForgotPassword');
   };
 
-  const onForgotPasswordPressed = () => {
-    console.warn('onForgotPasswordPressed');
+  const onLogin = async (username: string, password: string) => {
+    // navigation.push('')
   };
 
   return (
@@ -39,16 +39,16 @@ function SignInScreen() {
         isPassword
       />
 
-      <CustomButton onPress={onSignInPressed} text="Login" />
+      <CustomButton onPress={() => onLogin(username, password)} text="Login" />
 
       <CustomButton
-        onPress={onForgotPasswordPressed}
+        onPress={() => navigation.push('SignUp')}
         text="New? Register here!"
         type={CustomTypes.TERTIARY}
       />
 
       <CustomButton
-        onPress={onForgotPasswordPressed}
+        onPress={onForgotPassword}
         text="Forgot Password?"
         type={CustomTypes.TERTIARY}
       />
