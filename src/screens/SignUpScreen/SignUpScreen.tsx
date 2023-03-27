@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   Image,
   StyleSheet,
   useWindowDimensions,
@@ -13,11 +12,6 @@ import CustomButton from '../../components/CustomButton';
 import axios from 'axios';
 import {API_URL} from '@env';
 import {CustomTypes} from '../../util/enums';
-import {useDispatch, useSelector} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {RootState} from '../../state/store';
-import * as ActionCreators from '../../state/action-creators';
-import {User} from '../../util/interface';
 
 const SignUpScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -26,9 +20,6 @@ const SignUpScreen = ({navigation}: any) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const {height} = useWindowDimensions();
-
-  const state = useSelector((state: RootState) => state.user);
-  const {signIn} = bindActionCreators(ActionCreators, useDispatch());
 
   const onRegister = (
     username: string,
@@ -54,11 +45,6 @@ const SignUpScreen = ({navigation}: any) => {
       });
   };
 
-  const onTest = () => {
-    const user: User = {id: 1, picture_url: '', username: 'name'};
-    signIn(user);
-  };
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
@@ -68,9 +54,8 @@ const SignUpScreen = ({navigation}: any) => {
           resizeMode="contain"
         />
 
-        <Text>{state === undefined ? 'undefined' : state?.username}</Text>
-
         <CustomInput placeholder="Email" value={email} setValue={setEmail} />
+
         <CustomInput
           placeholder="Username"
           value={username}
@@ -93,7 +78,6 @@ const SignUpScreen = ({navigation}: any) => {
           onPress={() => onRegister(username, email, password, confirmPassword)}
           text="Register"
         />
-        <CustomButton onPress={() => onTest()} text="test" />
 
         <CustomButton
           onPress={() => navigation.push('SignIn')}
