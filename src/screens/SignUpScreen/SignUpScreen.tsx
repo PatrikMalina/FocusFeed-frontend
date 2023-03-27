@@ -9,9 +9,8 @@ import React, {useState} from 'react';
 import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import axios from 'axios';
-import {API_URL} from '@env';
-import {CustomTypes} from '../../util/enums';
+import {CustomTypes, Screens} from '../../util/enums';
+import {registerUser} from '../../service/AuthService';
 
 const SignUpScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -27,21 +26,13 @@ const SignUpScreen = ({navigation}: any) => {
     password: string,
     passwordConfirmation: string,
   ) => {
-    console.log('on register');
-
-    axios
-      .post(`${API_URL}/auth/register`, {
-        username,
-        email,
-        password,
-        passwordConfirmation,
-      })
+    registerUser(username, email, password, passwordConfirmation)
       .then(res => {
-        let user = res.data;
-        console.log(user);
+        console.log(res.data);
+        navigation.push(Screens.SIGN_IN);
       })
-      .catch(e => {
-        console.log(e);
+      .catch(res => {
+        console.warn(res.err);
       });
   };
 
@@ -80,7 +71,7 @@ const SignUpScreen = ({navigation}: any) => {
         />
 
         <CustomButton
-          onPress={() => navigation.push('SignIn')}
+          onPress={() => navigation.push(Screens.SIGN_IN)}
           text="Have an account? Login here!"
           type={CustomTypes.TERTIARY}
         />

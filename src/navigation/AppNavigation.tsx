@@ -5,6 +5,7 @@ import SplashScreen from '../screens/SplashScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
+import {Screens} from '../util/enums';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,17 +13,21 @@ const screenOptions = {headerShown: false};
 
 const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Home" screenOptions={screenOptions}>
-      <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Navigator
+      initialRouteName={Screens.HOME}
+      screenOptions={screenOptions}>
+      <Stack.Screen name={Screens.HOME} component={HomeScreen} />
     </Stack.Navigator>
   );
 };
 
 const AuthStack = () => {
   return (
-    <Stack.Navigator initialRouteName="SignIn" screenOptions={screenOptions}>
-      <Stack.Screen name="SignIn" component={SignInScreen} />
-      <Stack.Screen name="SignUp" component={SignUpScreen} />
+    <Stack.Navigator
+      initialRouteName={Screens.SIGN_IN}
+      screenOptions={screenOptions}>
+      <Stack.Screen name={Screens.SIGN_IN} component={SignInScreen} />
+      <Stack.Screen name={Screens.SIGN_UP} component={SignUpScreen} />
     </Stack.Navigator>
   );
 };
