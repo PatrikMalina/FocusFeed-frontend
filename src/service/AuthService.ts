@@ -14,3 +14,10 @@ export async function registerUser(
     passwordConfirmation,
   });
 }
+
+export async function loginUser(
+  username: string,
+  password: string,
+): Promise<AxiosResponse> {
+  return axios.post(`${API_URL}/auth/login`, {username, password});
+}
