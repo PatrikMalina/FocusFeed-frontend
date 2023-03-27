@@ -1,14 +1,7 @@
-import {
-  Text,
-  StyleSheet,
-  Pressable,
-  GestureResponderEvent,
-  NativeTouchEvent,
-  NativeSyntheticEvent,
-} from 'react-native';
+import {Text, StyleSheet, Pressable} from 'react-native';
 import React from 'react';
 import AppColors from '../../styling';
-import {CustomTypes} from '../../util';
+import {CustomTypes} from '../../util/enums';
 
 type CustomButton = {
   onPress: () => void;

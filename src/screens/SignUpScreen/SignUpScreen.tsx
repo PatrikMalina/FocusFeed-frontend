@@ -1,19 +1,23 @@
 import {
   View,
+  Text,
   Image,
   StyleSheet,
   useWindowDimensions,
   ScrollView,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {CustomTypes} from '../../util';
-import {AuthContext} from '../../context/AuthContext';
-import {AuthContextType} from '../../util/enums';
 import axios from 'axios';
-import {BASE_URL} from '../../config';
+import {API_URL} from '@env';
+import {CustomTypes} from '../../util/enums';
+import {useDispatch, useSelector} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {RootState} from '../../state/store';
+import * as ActionCreators from '../../state/action-creators';
+import {User} from '../../util/interface';
 
 const SignUpScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -23,7 +27,8 @@ const SignUpScreen = ({navigation}: any) => {
 
   const {height} = useWindowDimensions();
 
-  // const {onRegister} = useContext(AuthContext) as AuthContextType;
+  const state = useSelector((state: RootState) => state.user);
+  const {signIn} = bindActionCreators(ActionCreators, useDispatch());
 
   const onRegister = (
     username: string,
@@ -34,7 +39,7 @@ const SignUpScreen = ({navigation}: any) => {
     console.log('on register');
 
     axios
-      .post(`${BASE_URL}/auth/register`, {
+      .post(`${API_URL}/auth/register`, {
         username,
         email,
         password,
@@ -49,6 +54,11 @@ const SignUpScreen = ({navigation}: any) => {
       });
   };
 
+  const onTest = () => {
+    const user: User = {id: 1, picture_url: '', username: 'name'};
+    signIn(user);
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
@@ -57,6 +67,8 @@ const SignUpScreen = ({navigation}: any) => {
           style={[styles.logo, {height: height * 0.3}]}
           resizeMode="contain"
         />
+
+        <Text>{state === undefined ? 'undefined' : state?.username}</Text>
 
         <CustomInput placeholder="Email" value={email} setValue={setEmail} />
         <CustomInput
@@ -81,6 +93,7 @@ const SignUpScreen = ({navigation}: any) => {
           onPress={() => onRegister(username, email, password, confirmPassword)}
           text="Register"
         />
+        <CustomButton onPress={() => onTest()} text="test" />
 
         <CustomButton
           onPress={() => navigation.push('SignIn')}

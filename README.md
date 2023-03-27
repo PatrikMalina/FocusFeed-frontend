@@ -19,6 +19,10 @@ Loading environment variables [react-native-dotenv](https://www.npmjs.com/packag
 
 React Native [documentation](https://reactnative.dev/)
 
+#### React store
+
+For store we are using [redux with TypeScript](https://redux.js.org/usage/usage-with-typescript)
+
 #### React Navigation
 
 For navigation of screens we are using [React Navigation](https://reactnavigation.org/docs/getting-started/)

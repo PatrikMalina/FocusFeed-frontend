@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {CustomTypes} from '../../util';
+import {CustomTypes} from '../../util/enums';
 
 function SignInScreen({navigation}: any) {
   const [username, setUsername] = useState('');
