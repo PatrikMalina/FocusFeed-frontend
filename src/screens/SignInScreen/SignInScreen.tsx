@@ -3,20 +3,36 @@ import React, {useState} from 'react';
 import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {CustomTypes} from '../../util';
+import {CustomTypes} from '../../util/enums';
+import {useSelector, useDispatch} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {RootState} from '../../state';
+import * as ActionCreators from '../../state/action-creators';
+import {loginUser} from '../../service/AuthService';
 
-function SignInScreen() {
+function SignInScreen({navigation}: any) {
+  const state = useSelector((state: RootState) => state.user);
+  const {signIn} = bindActionCreators(ActionCreators, useDispatch());
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const {height} = useWindowDimensions();
 
-  const onSignInPressed = () => {
-    console.warn('Sign in');
+  const onForgotPassword = () => {
+    console.warn('onForgotPassword');
   };
 
-  const onForgotPasswordPressed = () => {
-    console.warn('onForgotPasswordPressed');
+  const onLogin = async (username: string, password: string) => {
+    loginUser(username, password)
+      .then(res => {
+        const user = res.data;
+        console.log(user);
+        signIn(user);
+      })
+      .catch(res => {
+        console.warn(res.error);
+      });
   };
 
   return (
@@ -39,16 +55,16 @@ function SignInScreen() {
         isPassword
       />
 
-      <CustomButton onPress={onSignInPressed} text="Login" />
+      <CustomButton onPress={() => onLogin(username, password)} text="Login" />
 
       <CustomButton
-        onPress={onForgotPasswordPressed}
+        onPress={() => navigation.push('SignUp')}
         text="New? Register here!"
         type={CustomTypes.TERTIARY}
       />
 
       <CustomButton
-        onPress={onForgotPasswordPressed}
+        onPress={onForgotPassword}
         text="Forgot Password?"
         type={CustomTypes.TERTIARY}
       />

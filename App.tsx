@@ -1,23 +1,14 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
-import SignInScreen from './src/screens/SignInScreen';
-import SignUpScreen from './src/screens/SignUpScreen';
-import AppColors from './src/styling/AppColors';
+import {Provider} from 'react-redux';
+import AppNavigation from './src/navigation/AppNavigation';
+import store from './src/state/store';
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.root}>
-      <SignInScreen />
-      {/* <SignUpScreen /> */}
-    </SafeAreaView>
+    <Provider store={store}>
+      <AppNavigation />
+    </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: AppColors.PRIMARY,
-  },
-});
 
 export default App;
