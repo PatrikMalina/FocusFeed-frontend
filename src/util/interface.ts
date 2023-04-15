@@ -6,6 +6,25 @@ export interface User {
   picture_url: string;
 }
 
+export interface Post {
+  id: number;
+  createdBy: number;
+  createdByUsername: string;
+  caption: string;
+  pictureUrl: string;
+  profilePictureUrl: string;
+  createdAt: string;
+  likes: Like[];
+}
+
+interface Like {
+  id: number;
+  postId: number;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AuthType {
   user?: User | null;
 }
