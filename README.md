@@ -29,6 +29,10 @@ For navigation of screens we are using [React Navigation](https://reactnavigatio
 
 Specifically we are using [Native Stack Navigator](https://reactnavigation.org/docs/native-stack-navigator/)
 
+### Icons
+
+Icons are using [React native vector icons](https://github.com/oblador/react-native-vector-icons)
+
 #### Wireframe
 
 Designe of screens [here](https://www.figma.com/file/HNEPUxCzjilcApUuSZhSc2/Untitled?node-id=0-1)

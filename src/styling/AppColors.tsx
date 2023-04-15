@@ -1,4 +1,6 @@
 const general: Record<string, string> = {
+  DEFAULT_BACKGROUND: '#f2f2f2',
+
   PRIMARY: 'white',
 
   // Button colors
