@@ -7,7 +7,7 @@ import {CustomTypes} from '../../util/enums';
 import {useDispatch} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
-import {loginUser} from '../../service/AuthService';
+import {loginUser} from '../../services/AuthService';
 
 function SignInScreen({navigation}: any) {
   const {setToken} = bindActionCreators(ActionCreators, useDispatch());

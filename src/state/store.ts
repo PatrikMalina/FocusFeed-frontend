@@ -1,11 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {combineReducers} from 'redux';
 import userReducer from './reducers/userReducer';
-import tokenReducer from './reducers/tokenReducer';
+import sessionReducer from './reducers/sessionReducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
-  token: tokenReducer,
+  session: sessionReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

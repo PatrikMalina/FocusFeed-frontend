@@ -10,7 +10,7 @@ import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {CustomTypes, Screens} from '../../util/enums';
-import {registerUser} from '../../service/AuthService';
+import {registerUser} from '../../services/AuthService';
 
 const SignUpScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');

@@ -3,6 +3,7 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
+import {checkMe} from '../../services/AppService';
 
 const HomeScreen = () => {
   const {removeToken, removeUser} = bindActionCreators(

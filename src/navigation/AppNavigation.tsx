@@ -38,7 +38,7 @@ const AppNavigation = () => {
   const [currentToken, setCurrentToken] = useState<Token | null | undefined>(
     null,
   );
-  const token = useSelector((state: RootState) => state.token);
+  const token = useSelector((state: RootState) => state.session);
 
   useEffect(() => {
     setCurrentToken(token);

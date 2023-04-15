@@ -47,8 +47,3 @@ export const removeToken = () => {
     });
   };
 };
-
-export const signOut = () => {
-  removeUser();
-  removeToken();
-};
