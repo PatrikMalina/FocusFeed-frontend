@@ -9,6 +9,11 @@ export enum ActionTypes {
   REMOVE_USER = 'removeUser',
 }
 
+export enum TokenActionTypes {
+  SET_TOKEN = 'setToken',
+  REMOVE_TOKEN = 'removeToken',
+}
+
 export enum Screens {
   HOME = 'Home',
   SIGN_IN = 'SignIn',

@@ -4,15 +4,13 @@ import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {CustomTypes} from '../../util/enums';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {RootState} from '../../state';
 import * as ActionCreators from '../../state/action-creators';
 import {loginUser} from '../../service/AuthService';
 
 function SignInScreen({navigation}: any) {
-  const state = useSelector((state: RootState) => state.user);
-  const {signIn} = bindActionCreators(ActionCreators, useDispatch());
+  const {setToken} = bindActionCreators(ActionCreators, useDispatch());
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -26,9 +24,8 @@ function SignInScreen({navigation}: any) {
   const onLogin = async (username: string, password: string) => {
     loginUser(username, password)
       .then(res => {
-        const user = res.data;
-        console.log(user);
-        signIn(user);
+        const token = res.data;
+        setToken(token);
       })
       .catch(res => {
         console.warn(res.error);

@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SplashScreen from '../screens/SplashScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import {Screens} from '../util/enums';
 import {RootState} from '../state';
 import {useSelector} from 'react-redux';
-import {User} from '../util/interface';
+import {Token} from '../util/interface';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,16 +35,18 @@ const AuthStack = () => {
 };
 
 const AppNavigation = () => {
-  const [currentUser, setCurrentUser] = useState<User | null | undefined>(null);
-  const state = useSelector((state: RootState) => state.user);
+  const [currentToken, setCurrentToken] = useState<Token | null | undefined>(
+    null,
+  );
+  const token = useSelector((state: RootState) => state.token);
 
   useEffect(() => {
-    setCurrentUser(state);
-  }, [state]);
+    setCurrentToken(token);
+  }, [token]);
 
   return (
     <NavigationContainer>
-      {currentUser ? <AppStack /> : <AuthStack />}
+      {currentToken ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
