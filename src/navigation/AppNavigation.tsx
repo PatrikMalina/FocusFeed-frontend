@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
@@ -8,18 +9,33 @@ import {Screens} from '../util/enums';
 import {RootState} from '../state';
 import {useSelector} from 'react-redux';
 import {Token} from '../util/interface';
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const screenOptions = {headerShown: false};
 
 const AppStack = () => {
   return (
-    <Stack.Navigator
+    <Tab.Navigator
       initialRouteName={Screens.HOME}
-      screenOptions={screenOptions}>
-      <Stack.Screen name={Screens.HOME} component={HomeScreen} />
-    </Stack.Navigator>
+      screenOptions={({route}): any => ({
+        tabBarIcon: ({focused, size}: any) => {
+          let iconName = '';
+          let routName = route.name;
+
+          if (routName === Screens.HOME) {
+            iconName = focused ? 'home' : 'home-outline';
+          }
+
+          return <Icons name={iconName} size={size} color={'black'} />;
+        },
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'gray',
+      })}>
+      <Tab.Screen name={Screens.HOME} component={HomeScreen} />
+    </Tab.Navigator>
   );
 };
 
