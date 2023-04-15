@@ -45,23 +45,35 @@ const SignUpScreen = ({navigation}: any) => {
           resizeMode="contain"
         />
 
-        <CustomInput placeholder="Email" value={email} setValue={setEmail} />
+        <CustomInput
+          placeholder="Email"
+          value={email}
+          setValue={setEmail}
+          iconName="email-outline"
+          iconSize={30}
+        />
 
         <CustomInput
           placeholder="Username"
           value={username}
           setValue={setUsername}
+          iconName="account-outline"
+          iconSize={30}
         />
         <CustomInput
           placeholder="Password"
           value={password}
           setValue={setPassword}
+          iconName="lock-outline"
+          iconSize={30}
           isPassword
         />
         <CustomInput
           placeholder="Confirm password"
           value={confirmPassword}
           setValue={setConfirmPassword}
+          iconName="lock-outline"
+          iconSize={30}
           isPassword
         />
 

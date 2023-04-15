@@ -44,11 +44,15 @@ function SignInScreen({navigation}: any) {
         placeholder="Username"
         value={username}
         setValue={setUsername}
+        iconName="account-outline"
+        iconSize={30}
       />
       <CustomInput
         placeholder="Password"
         value={password}
         setValue={setPassword}
+        iconName="lock-outline"
+        iconSize={30}
         isPassword
       />
 
