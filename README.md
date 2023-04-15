@@ -27,7 +27,7 @@ For store we are using [redux with TypeScript](https://redux.js.org/usage/usage-
 
 For navigation of screens we are using [React Navigation](https://reactnavigation.org/docs/getting-started/)
 
-Specifically we are using [Native Stack Navigator](https://reactnavigation.org/docs/native-stack-navigator/)
+Specifically we are using [Native Stack Navigator](https://reactnavigation.org/docs/native-stack-navigator/) and [Tab navigation](https://reactnavigation.org/docs/tab-based-navigation)
 
 ### Icons
 
