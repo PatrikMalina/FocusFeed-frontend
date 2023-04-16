@@ -29,6 +29,10 @@ For navigation of screens we are using [React Navigation](https://reactnavigatio
 
 Specifically we are using [Native Stack Navigator](https://reactnavigation.org/docs/native-stack-navigator/) and [Tab navigation](https://reactnavigation.org/docs/tab-based-navigation)
 
+#### Date fns
+
+[Date fns](https://date-fns.org/docs/Getting-Started#installation) is used for returning how long ako was last message.
+
 ### Icons
 
 Icons are using [React native vector icons](https://github.com/oblador/react-native-vector-icons)

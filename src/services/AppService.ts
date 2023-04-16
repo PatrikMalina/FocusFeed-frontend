@@ -10,5 +10,13 @@ export async function myPosts(): Promise<AxiosResponse> {
 }
 
 export async function likePost(id: number): Promise<AxiosResponse> {
-  return axiosInstance.post('post/like', {id})
+  return axiosInstance.post('post/like', {id});
+}
+
+export async function getChats() {
+  return axiosInstance.get('chat');
+}
+
+export async function getLastMessage(chatId: number) {
+  return axiosInstance.post('chat/lastMessage', {chatId});
 }

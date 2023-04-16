@@ -1,10 +1,15 @@
 import {FlatList, StyleSheet, View} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Avatar, Text} from 'react-native-paper';
 import AppColors from '../../styling/AppColors';
 import {Screens} from '../../util/enums';
+import {getChats, getLastMessage} from '../../services/AppService';
+import {API_URL} from '@env';
+import {Chat} from '../../util/interface';
+import store from '../../state/store';
+import {formatDistance} from 'date-fns';
 
 const CustomSearch = () => {
   return (
@@ -20,24 +25,30 @@ const CustomSearch = () => {
   );
 };
 
-interface UserChat {
-  user: {
-    id: number;
-    username: string;
-    picture_url: string;
-    last_message?: string;
-  };
-}
+const CustomUser = ({chat}: {chat: Chat}) => {
+  const friend =
+    chat.user_1.id !== store.getState().user?.id ? chat.user_1 : chat.user_2;
 
-const CustomUser = ({user}: UserChat) => {
+  const relativeDate = () => {
+    if (chat.lastMessage) {
+      const dateValue = new Date(chat.lastMessage?.createdAt);
+      return formatDistance(dateValue, new Date(), {
+        addSuffix: true,
+      });
+    }
+  };
+
   return (
     <View style={styles.item}>
-      <Avatar.Image size={60} source={{uri: user.picture_url}} />
+      <Avatar.Image
+        size={60}
+        source={{uri: `${API_URL}/${friend.pictureUrl}`}}
+      />
       <View style={styles.user}>
-        <Text style={styles.username}>{user.username}</Text>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.lastText}>{user.last_message}</Text>
-          <Text style={styles.lastSeen}>{'6min ago'}</Text>
+        <Text style={styles.username}>{friend.username}</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={styles.lastText}>{chat.lastMessage?.content}</Text>
+          <Text style={styles.lastSeen}>{relativeDate()}</Text>
         </View>
       </View>
     </View>
@@ -45,70 +56,22 @@ const CustomUser = ({user}: UserChat) => {
 };
 
 const ContactsScreen = ({navigation}: any) => {
-  const users = [
-    {
-      id: 1,
-      username: 'johndoe',
-      picture_url: 'https://randomuser.me/api/portraits/men/1.jpg',
-      last_message: 'Last msg',
-    },
-    {
-      id: 2,
-      username: 'janedoe',
-      picture_url: 'https://randomuser.me/api/portraits/women/2.jpg',
-      last_message: 'Last msg',
-    },
-    {
-      id: 3,
-      username: 'bobsmith',
-      picture_url: 'https://randomuser.me/api/portraits/men/3.jpg',
-      last_message: 'Last msg',
-    },
-    {
-      id: 4,
-      username: 'sarahjones',
-      picture_url: 'https://randomuser.me/api/portraits/women/4.jpg',
-      last_message: 'Last msg',
-    },
-    {
-      id: 5,
-      username: 'mikebrown',
-      picture_url: 'https://randomuser.me/api/portraits/men/5.jpg',
-      last_message: 'Last msg',
-    },
-    {
-      id: 6,
-      username: 'emilytaylor',
-      picture_url: 'https://randomuser.me/api/portraits/women/6.jpg',
-      last_message: 'Last msg',
-    },
-    {
-      id: 7,
-      username: 'davidlee',
-      picture_url: 'https://randomuser.me/api/portraits/men/7.jpg',
-      last_message: 'Last msg',
-    },
-    {
-      id: 8,
-      username: 'amywright',
-      picture_url: 'https://randomuser.me/api/portraits/women/8.jpg',
-      last_message: 'Last msg',
-    },
-    {
-      id: 9,
-      username: 'petersmith',
-      picture_url: 'https://randomuser.me/api/portraits/men/9.jpg',
-      last_message: 'Last msg',
-    },
-    {
-      id: 10,
-      username: 'lisawilson',
-      picture_url: 'https://randomuser.me/api/portraits/women/10.jpg',
-      last_message: 'Last msg',
-    },
-  ];
+  const [chats, setChats] = useState<Chat[]>([]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getChats().then(res => {
+      setChats(res.data);
+
+      let copyChats = Object.assign([], res.data);
+
+      copyChats.forEach((chat: Chat) => {
+        getLastMessage(chat.id).then(res => {
+          chat.lastMessage = res.data;
+          setChats(copyChats);
+        });
+      });
+    });
+  }, []);
 
   return (
     <>
@@ -126,8 +89,8 @@ const ContactsScreen = ({navigation}: any) => {
       </View>
       <View style={styles.container}>
         <FlatList
-          data={users}
-          renderItem={({item}) => <CustomUser user={item} />}
+          data={chats}
+          renderItem={({item}) => <CustomUser chat={item} />}
         />
       </View>
     </>
@@ -142,7 +105,7 @@ const styles = StyleSheet.create({
   },
 
   user: {
-    paddingLeft: '10%',
+    paddingLeft: '5%',
   },
 
   username: {
@@ -152,10 +115,13 @@ const styles = StyleSheet.create({
   lastText: {
     opacity: 0.8,
     fontSize: 14,
+    width: '50%',
   },
 
   lastSeen: {
-    paddingLeft: '45%',
+    marginLeft: '2%',
+    marginRight: '2%',
+    width: '30%',
   },
 
   item: {
