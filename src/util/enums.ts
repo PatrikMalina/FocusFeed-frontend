@@ -18,4 +18,13 @@ export enum Screens {
   HOME = 'Home',
   SIGN_IN = 'SignIn',
   SIGN_UP = 'SignUp',
+  CONTACTS = 'Contacts',
+  FRIENDS = 'Friends',
+  TAB_SCREENS = 'Tab screens',
+}
+
+export enum FriendshipStatus {
+  ACCEPTED = 1,
+  PENDING = 0,
+  DECLINED = -1,
 }
