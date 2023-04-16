@@ -14,13 +14,17 @@ const HomeScreen = () => {
     ActionCreators,
     useDispatch(),
   );
+
   const [currentUser, setCurrentUser] = useState<User | null | undefined>();
   const [posts, setPosts] = useState<Post[]>([]);
   const user = useSelector((state: RootState) => state.user);
+
   useEffect(() => {
     checkMe().then(res => {
-      const user = res.data;
-      setUser(user);
+      if (res !== undefined) {
+        const user = res.data;
+        setUser(user);
+      }
     });
   }, []);
 
@@ -29,11 +33,18 @@ const HomeScreen = () => {
   }, [user]);
 
   useEffect(() => {
-    myPosts().then(res => {
-      const postsData = res.data;
-      setPosts(postsData);
-    });
+    myPosts()
+      .then(res => {
+        if (res !== undefined) {
+          const postsData = res.data;
+          setPosts(postsData);
+        }
+      })
+      .catch(error => {
+        console.warn(error);
+      });
   }, [posts]);
+
   return (
     <View>
       <Text>Signed in! {currentUser?.username}</Text>

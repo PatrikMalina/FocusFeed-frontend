@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {CustomTypes} from '../../util/enums';
+import {CustomTypes, Screens} from '../../util/enums';
 import {useDispatch} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
@@ -59,7 +59,7 @@ function SignInScreen({navigation}: any) {
       <CustomButton onPress={() => onLogin(username, password)} text="Login" />
 
       <CustomButton
-        onPress={() => navigation.push('SignUp')}
+        onPress={() => navigation.push(Screens.SIGN_UP)}
         text="New? Register here!"
         type={CustomTypes.TERTIARY}
       />

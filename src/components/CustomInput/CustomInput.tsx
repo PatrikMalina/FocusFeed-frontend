@@ -41,8 +41,7 @@ const CustomInput = ({
             size={iconSize}
             style={{
               paddingRight: 0,
-              paddingBottom: 2,
-              paddingTop: 2,
+              paddingVertical: 2,
             }}
           />
         ) : (
@@ -54,8 +53,7 @@ const CustomInput = ({
             onPress={() => setNotShown(!notShown)}
             style={{
               paddingRight: 0,
-              paddingBottom: 2,
-              paddingTop: 2,
+              paddingVertical: 2,
             }}
           />
         )}
