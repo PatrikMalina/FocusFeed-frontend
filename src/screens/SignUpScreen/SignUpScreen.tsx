@@ -28,7 +28,6 @@ const SignUpScreen = ({navigation}: any) => {
   ) => {
     registerUser(username, email, password, passwordConfirmation)
       .then(res => {
-        console.log(res.data);
         navigation.push(Screens.SIGN_IN);
       })
       .catch(res => {
