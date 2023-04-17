@@ -9,20 +9,32 @@ export interface User {
 export interface Post {
   id: number;
   createdBy: number;
-  createdByUsername: string;
   caption: string;
   pictureUrl: string;
-  profilePictureUrl: string;
   createdAt: string;
   likes: Like[];
+  comments: Comment[];
+  createdByUsername: string;
+  profilePictureUrl: string;
 }
 
-interface Like {
+export interface Like {
   id: number;
   postId: number;
   userId: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Comment {
+  id: number;
+  postId: number;
+  userId: number;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+  commentByUsername: string;
+  commentProfilePictureUrl: string;
 }
 
 export interface AuthType {

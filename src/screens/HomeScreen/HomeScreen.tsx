@@ -1,15 +1,15 @@
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
-import {checkMe, myPosts} from '../../services/AppService';
+import {allPosts, checkMe } from '../../services/AppService';
 import Posts from '../../components/Post';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RootState} from '../../state/store';
 import {Post, User} from '../../util/interface';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}: any) => {
   const {removeToken, removeUser, setUser} = bindActionCreators(
     ActionCreators,
     useDispatch(),
@@ -29,11 +29,12 @@ const HomeScreen = () => {
   }, [user]);
 
   useEffect(() => {
-    myPosts().then(res => {
+    allPosts().then(res => {
       const postsData = res.data;
       setPosts(postsData);
     });
   }, [posts]);
+  
   return (
     <View>
       <Text>Signed in! {currentUser?.username}</Text>
@@ -44,11 +45,14 @@ const HomeScreen = () => {
           removeUser();
           console.log('sign out');
         }}
+
       />
-      <ScrollView>
+      <ScrollView style={{marginBottom: 50}}>
         {posts.map((post, index) => (
-          <Posts post={post} key={index} />
-        ))}
+          <TouchableOpacity onPress={() => navigation.push('Comment', { post })}>
+            <Posts post={post} key={index} />
+          </TouchableOpacity>
+        ))} 
       </ScrollView>
     </View>
   );

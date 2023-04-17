@@ -10,11 +10,23 @@ import {RootState} from '../state';
 import {useSelector} from 'react-redux';
 import {Token} from '../util/interface';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import CommentScreen from '../screens/CommentScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const screenOptions = {headerShown: false};
+
+const HomeStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName={Screens.HOME}
+      screenOptions={screenOptions}      >
+      <Stack.Screen name={Screens.HOME} component={HomeScreen} />
+      <Stack.Screen name={Screens.COMMENT} component={CommentScreen} />
+    </Stack.Navigator>
+  )
+}
 
 const AppStack = () => {
   return (
@@ -33,8 +45,9 @@ const AppStack = () => {
         },
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray',
+        headerShown: false
       })}>
-      <Tab.Screen name={Screens.HOME} component={HomeScreen} />
+      <Tab.Screen name={Screens.HOME} component={HomeStack} />
     </Tab.Navigator>
   );
 };

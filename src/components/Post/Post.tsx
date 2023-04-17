@@ -14,6 +14,7 @@ const Posts: React.FC<Props> = ({post}) => {
   const hasUserLikedPost = post.likes.find(
     like => like.userId == store.getState().user?.id,
   );
+  
   return (
     <View style={{marginBottom: 60}}>
       <Divider width={1} orientation="vertical" />
