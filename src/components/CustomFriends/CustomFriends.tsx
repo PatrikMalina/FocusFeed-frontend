@@ -4,27 +4,26 @@ import {User} from '../../util/interface';
 import {FriendshipStatus} from '../../util/enums';
 import AppColors from '../../styling';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useEffect, useState} from 'react';
+import {getFriends} from '../../services/AppService';
+import store from '../../state/store';
+import {API_URL} from '@env';
 
-const currentUser = {
-  id: 2,
-  username: 'janedoe',
-  picture_url: 'https://randomuser.me/api/portraits/women/2.jpg',
-};
+const currentUser = store.getState().user;
 
 export interface Friend {
   id: number;
-  sent_by: User;
-  sent_to: User;
-  updated_at: string;
+  sentByUser: User;
+  sentToUser: User;
+  updatedAt: string;
   accepted: number;
 }
-
 interface FriendStatus {
   friend: Friend;
 }
 
 const CustomStatus = ({friend}: FriendStatus) => {
-  const sentByMe = currentUser.id === friend.sent_by.id;
+  const sentByMe = currentUser?.id === friend.sentByUser.id;
 
   return (
     <View style={{alignSelf: 'center', width: '26%'}}>
@@ -71,11 +70,13 @@ const CustomStatus = ({friend}: FriendStatus) => {
 
 const CustomFriend = ({friend}: FriendStatus) => {
   const user =
-    currentUser.id !== friend.sent_by.id ? friend.sent_by : friend.sent_to;
+    currentUser?.id !== friend.sentByUser.id
+      ? friend.sentByUser
+      : friend.sentToUser;
 
   return (
     <View style={styles.item}>
-      <Avatar.Image size={60} source={{uri: user.picture_url}} />
+      <Avatar.Image size={60} source={{uri: `${API_URL}/${user.pictureUrl}`}} />
 
       <View style={styles.status}>
         <Text style={styles.username}>{user.username}</Text>
@@ -84,7 +85,19 @@ const CustomFriend = ({friend}: FriendStatus) => {
   );
 };
 
-const CustomFriends = ({friends}: {friends: Friend[]}) => {
+const CustomFriends = () => {
+  const [friends, setFriends] = useState<Friend[]>([]);
+
+  useEffect(() => {
+    getFriends()
+      .then(res => {
+        setFriends(res.data);
+      })
+      .catch(error => {
+        console.warn(error);
+      });
+  }, []);
+
   return (
     <FlatList
       data={friends}

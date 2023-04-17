@@ -1,18 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {View, FlatList, TextInput, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {View, TextInput, StyleSheet} from 'react-native';
 import AppColors from '../../styling';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {TouchableOpacity} from 'react-native';
 import {Button} from 'react-native-paper';
-import CustomFriends, {
-  Friend,
-} from '../../components/CustomFriends/CustomFriends';
-
-const currentUser = {
-  id: 2,
-  username: 'janedoe',
-  picture_url: 'https://randomuser.me/api/portraits/women/2.jpg',
-};
+import CustomFriends from '../../components/CustomFriends/CustomFriends';
 
 const CustomSearch = () => {
   return (
@@ -31,89 +22,6 @@ const CustomSearch = () => {
 const ContactsScreen = ({navigation: {goBack}}: any) => {
   const [isYours, setIsYours] = useState(true);
   const [searchText, setSearchText] = useState('');
-  const [friends, setFriends] = useState<Friend[]>([]);
-
-  useEffect(() => {
-    const data = [
-      {
-        id: 1,
-        sent_by: {
-          id: currentUser.id,
-          username: currentUser.username,
-          picture_url: currentUser.picture_url,
-        },
-        sent_to: {
-          id: 3,
-          username: 'johnsmith',
-          picture_url: 'https://randomuser.me/api/portraits/men/3.jpg',
-        },
-        updated_at: '2022-10-01T12:00:00Z',
-        accepted: 1,
-      },
-      {
-        id: 2,
-        sent_by: {
-          id: 4,
-          username: 'sarahjones',
-          picture_url: 'https://randomuser.me/api/portraits/women/4.jpg',
-        },
-        sent_to: {
-          id: currentUser.id,
-          username: currentUser.username,
-          picture_url: currentUser.picture_url,
-        },
-        updated_at: '2022-09-15T08:30:00Z',
-        accepted: 1,
-      },
-      {
-        id: 3,
-        sent_by: {
-          id: currentUser.id,
-          username: currentUser.username,
-          picture_url: currentUser.picture_url,
-        },
-        sent_to: {
-          id: 8,
-          username: 'decknose',
-          picture_url: 'https://randomuser.me/api/portraits/men/8.jpg',
-        },
-        updated_at: '2022-08-20T16:45:00Z',
-        accepted: 0,
-      },
-      {
-        id: 5,
-        sent_by: {
-          id: 10,
-          username: 'meryjane',
-          picture_url: 'https://randomuser.me/api/portraits/women/11.jpg',
-        },
-        sent_to: {
-          id: currentUser.id,
-          username: currentUser.username,
-          picture_url: currentUser.picture_url,
-        },
-        updated_at: '2022-08-20T16:45:00Z',
-        accepted: 0,
-      },
-      {
-        id: 4,
-        sent_by: {
-          id: 8,
-          username: 'amywright',
-          picture_url: 'https://randomuser.me/api/portraits/women/8.jpg',
-        },
-        sent_to: {
-          id: currentUser.id,
-          username: currentUser.username,
-          picture_url: currentUser.picture_url,
-        },
-        updated_at: '2022-07-05T10:20:00Z',
-        accepted: -1,
-      },
-    ];
-
-    setFriends(data);
-  }, []);
 
   const changeTab = () => {
     setIsYours(!isYours);
@@ -160,7 +68,7 @@ const ContactsScreen = ({navigation: {goBack}}: any) => {
         </Button>
       </View>
       <View style={styles.container}>
-        {isYours ? <CustomFriends friends={friends} /> : <></>}
+        {isYours ? <CustomFriends /> : <></>}
       </View>
     </>
   );

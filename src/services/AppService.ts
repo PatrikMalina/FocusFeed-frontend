@@ -20,3 +20,7 @@ export async function getChats() {
 export async function getLastMessage(chatId: number) {
   return axiosInstance.post('chat/lastMessage', {chatId});
 }
+
+export async function getFriends() {
+  return axiosInstance.get('friends');
+}
