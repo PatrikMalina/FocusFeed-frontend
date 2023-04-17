@@ -1,13 +1,13 @@
-import {View, Image, StyleSheet, useWindowDimensions} from 'react-native';
+import {View, StyleSheet, useWindowDimensions} from 'react-native';
 import React, {useState} from 'react';
-import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import {CustomTypes} from '../../util/enums';
+import {CustomTypes, Screens} from '../../util/enums';
 import {useDispatch} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
 import {loginUser} from '../../services/AuthService';
+import LogoIcon from '../../components/LogoIcon/LogoIcon';
 
 function SignInScreen({navigation}: any) {
   const {setToken} = bindActionCreators(ActionCreators, useDispatch());
@@ -34,11 +34,9 @@ function SignInScreen({navigation}: any) {
 
   return (
     <View style={styles.root}>
-      <Image
-        source={Logo}
-        style={[styles.logo, {height: height * 0.3}]}
-        resizeMode="contain"
-      />
+      <View style={[styles.logo, {height: height * 0.3}]}>
+        <LogoIcon />
+      </View>
 
       <CustomInput
         placeholder="Username"
@@ -59,7 +57,7 @@ function SignInScreen({navigation}: any) {
       <CustomButton onPress={() => onLogin(username, password)} text="Login" />
 
       <CustomButton
-        onPress={() => navigation.push('SignUp')}
+        onPress={() => navigation.push(Screens.SIGN_UP)}
         text="New? Register here!"
         type={CustomTypes.TERTIARY}
       />

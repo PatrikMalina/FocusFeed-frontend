@@ -18,7 +18,19 @@ export async function postById(id: number): Promise<AxiosResponse> {
 }
 
 export async function likePost(id: number): Promise<AxiosResponse> {
-  return axiosInstance.post('post/like', {id})
+  return axiosInstance.post('post/like', {id});
+}
+
+export async function getChats() {
+  return axiosInstance.get('chat');
+}
+
+export async function getLastMessage(chatId: number) {
+  return axiosInstance.post('chat/lastMessage', {chatId});
+}
+
+export async function getFriends() {
+  return axiosInstance.get('friends');
 }
 
 export async function addComment(id: number, text: string): Promise<AxiosResponse> {

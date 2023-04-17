@@ -6,11 +6,11 @@ import {
   ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
-import {Logo} from '../../../assets/images';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {CustomTypes, Screens} from '../../util/enums';
 import {registerUser} from '../../services/AuthService';
+import LogoIcon from '../../components/LogoIcon/LogoIcon';
 
 const SignUpScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -28,7 +28,6 @@ const SignUpScreen = ({navigation}: any) => {
   ) => {
     registerUser(username, email, password, passwordConfirmation)
       .then(res => {
-        console.log(res.data);
         navigation.push(Screens.SIGN_IN);
       })
       .catch(res => {
@@ -39,11 +38,9 @@ const SignUpScreen = ({navigation}: any) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
-        <Image
-          source={Logo}
-          style={[styles.logo, {height: height * 0.3}]}
-          resizeMode="contain"
-        />
+        <View style={[styles.logo, {height: height * 0.3}]}>
+          <LogoIcon />
+        </View>
 
         <CustomInput
           placeholder="Email"

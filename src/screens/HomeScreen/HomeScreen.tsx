@@ -14,27 +14,31 @@ const HomeScreen = ({navigation}: any) => {
     ActionCreators,
     useDispatch(),
   );
+
   const [currentUser, setCurrentUser] = useState<User | null | undefined>();
   const [posts, setPosts] = useState<Post[]>([]);
   const user = useSelector((state: RootState) => state.user);
+
   useEffect(() => {
     checkMe().then(res => {
-      const user = res.data;
-      setUser(user);
+      if (res !== undefined) {
+        const user = res.data;
+        setUser(user);
+      }
     });
+
+    allPosts().then(res => {
+      setPosts(res.data);
+    });
+      .catch(error => {
+        console.warn(error);
+      });
   }, []);
 
   useEffect(() => {
     setCurrentUser(user);
   }, [user]);
 
-  useEffect(() => {
-    allPosts().then(res => {
-      const postsData = res.data;
-      setPosts(postsData);
-    });
-  }, [posts]);
-  
   return (
     <View>
       <Text>Signed in! {currentUser?.username}</Text>
