@@ -33,9 +33,15 @@ Specifically we are using [Native Stack Navigator](https://reactnavigation.org/d
 
 [Date fns](https://date-fns.org/docs/Getting-Started#installation) is used for returning how long ako was last message.
 
-### Icons
+#### Icons
 
 Icons are using [React native vector icons](https://github.com/oblador/react-native-vector-icons)
+
+#### Splash Screen animation
+
+For the animation library we are using [Lottie](https://github.com/lottie-react-native/lottie-react-native)
+
+Splash animation taken from [here](https://lottiefiles.com/65554-water-splash)
 
 #### Wireframe
 

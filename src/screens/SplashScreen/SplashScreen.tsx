@@ -5,6 +5,7 @@ import {Token} from '../../util/interface';
 import {useDispatch} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
+import Lottie from 'lottie-react-native';
 
 function SplashScreen({
   setLoading,
@@ -31,13 +32,15 @@ function SplashScreen({
   };
 
   useEffect(() => {
-    getToken();
+    setTimeout(() => getToken(), 1000);
   }, []);
 
   return (
-    <View>
-      <Text>Loading...</Text>
-    </View>
+    <Lottie
+      source={require('../../../assets/animations/splash_animation.json')}
+      autoPlay
+      loop
+    />
   );
 }
 
