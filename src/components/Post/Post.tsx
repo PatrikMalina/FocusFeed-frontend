@@ -45,7 +45,7 @@ const Posts: React.FC<Props> = ({post}) => {
         }}>
         <Image
           source={{uri: `${API_URL}/` + post.pictureUrl}}
-          style={{width: '80%', height: 250, resizeMode: 'cover'}}
+          style={{width: '80%', height: 250, resizeMode: 'contain'}}
         />
       </View>
 

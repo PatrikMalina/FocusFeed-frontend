@@ -7,7 +7,7 @@ import PostIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Comment, Post } from '../../util/interface';
 import { addComment, postById } from '../../services/AppService';
 
-const CommentScreen = ({ route, navigation }: any) => {
+const CommentScreen = ({ route, navigation: {goBack}, navigation }: any) => {
     const { post } = route.params;   
     const [commentText, setCommentText] = useState('');
     const handleCommentSubmit = async (commentText: string, post: any) => {
@@ -22,16 +22,18 @@ const CommentScreen = ({ route, navigation }: any) => {
   };
   
   return (
-    <View>
+    <View style={{ flex: 1 }}>
     <View style={{margin: 5}}>
-        <Icons name={'left'} size={40} color={'black'} onPress={() => navigation.push('Home')}/>
+        <Icons name={'left'} size={40} color={'black'} onPress={() => goBack()}/>
     </View>
-    <ScrollView style={{marginBottom: 100}}>
+    <View style={{ flex: 1 }}>
+    <ScrollView style={{marginBottom: 60}}>
       <Posts post={post} />
       {post.comments.map((comment: Comment) => (
         <Comments comment={comment} />
       ))}
     </ScrollView>
+    </View>
     <View style={styles.commentInputContainer}>
       <TextInput
         style={{ flex: 1, height: 40, borderColor: 'gray', borderWidth: 1, borderRadius: 10, margin: 5, paddingLeft: 10 }}
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    marginBottom: 50
+    marginBottom: 0
   },
   commentInput: {
     flex: 1,
