@@ -26,13 +26,7 @@ const HomeScreen = () => {
         setUser(user);
       }
     });
-  }, []);
 
-  useEffect(() => {
-    setCurrentUser(user);
-  }, [user]);
-
-  useEffect(() => {
     myPosts()
       .then(res => {
         if (res !== undefined) {
@@ -43,7 +37,11 @@ const HomeScreen = () => {
       .catch(error => {
         console.warn(error);
       });
-  }, [posts]);
+  }, []);
+
+  useEffect(() => {
+    setCurrentUser(user);
+  }, [user]);
 
   return (
     <View>
