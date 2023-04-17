@@ -12,6 +12,7 @@ import {Token} from '../util/interface';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ContactsScreen from '../screens/ContactsScreen';
 import FriendsScreen from '../screens/FriendsScreen';
+import SplashScreen from '../screens/SplashScreen/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -73,6 +74,8 @@ const AppNavigation = () => {
   const [currentToken, setCurrentToken] = useState<Token | null | undefined>(
     null,
   );
+  const [isLoading, setIsLoading] = useState(true);
+
   const token = useSelector((state: RootState) => state.session);
 
   useEffect(() => {
@@ -81,7 +84,13 @@ const AppNavigation = () => {
 
   return (
     <NavigationContainer>
-      {currentToken ? <AppStack /> : <AuthStack />}
+      {isLoading ? (
+        <SplashScreen setLoading={setIsLoading} />
+      ) : currentToken ? (
+        <AppStack />
+      ) : (
+        <AuthStack />
+      )}
     </NavigationContainer>
   );
 };

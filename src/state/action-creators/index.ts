@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ActionTypes, TokenActionTypes} from '../../util/enums';
 import {AuthToken, State} from '../../util/interface';
 import {Dispatch} from 'redux';
@@ -30,7 +31,16 @@ export const removeUser = () => {
   };
 };
 
-export const setToken = (token: AuthToken) => {
+export const setToken = (token: AuthToken, saveToStorage: boolean = true) => {
+  if (saveToStorage) {
+    try {
+      const jsonValue = JSON.stringify(token);
+      AsyncStorage.setItem('@token', jsonValue);
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
   return (dispatch: Dispatch<TokenDispatchType>) => {
     dispatch({
       type: TokenActionTypes.SET_TOKEN,
@@ -40,6 +50,12 @@ export const setToken = (token: AuthToken) => {
 };
 
 export const removeToken = () => {
+  try {
+    AsyncStorage.removeItem('@token');
+  } catch (e) {
+    console.warn(e);
+  }
+
   return (dispatch: Dispatch<TokenDispatchType>) => {
     dispatch({
       type: TokenActionTypes.REMOVE_TOKEN,
