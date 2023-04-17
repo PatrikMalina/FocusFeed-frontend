@@ -13,6 +13,7 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CommentScreen from '../screens/CommentScreen';
 import FriendsScreen from '../screens/FriendsScreen';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import ContactsScreen from '../screens/ContactsScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,7 +21,6 @@ const Tab = createBottomTabNavigator();
 const screenOptions = {headerShown: false};
 
 const TabScreens = () => {
-
   return (
     <Tab.Navigator
       initialRouteName={Screens.HOME}
@@ -41,7 +41,6 @@ const TabScreens = () => {
         },
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray',
-        headerShown: false
       })}>
       <Tab.Screen name={Screens.HOME} component={HomeScreen} />
       <Tab.Screen name={Screens.CONTACTS} component={ContactsScreen} />
