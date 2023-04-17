@@ -10,7 +10,7 @@ import {RootState} from '../state';
 import {useSelector} from 'react-redux';
 import {Token} from '../util/interface';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ContactsScreen from '../screens/ContactsScreen';
+import CommentScreen from '../screens/CommentScreen';
 import FriendsScreen from '../screens/FriendsScreen';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
 
@@ -20,6 +20,7 @@ const Tab = createBottomTabNavigator();
 const screenOptions = {headerShown: false};
 
 const TabScreens = () => {
+
   return (
     <Tab.Navigator
       initialRouteName={Screens.HOME}
@@ -36,11 +37,11 @@ const TabScreens = () => {
           if (routName === Screens.CONTACTS) {
             iconName = focused ? 'message' : 'message-outline';
           }
-
           return <Icons name={iconName} size={size} color={'black'} />;
         },
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray',
+        headerShown: false
       })}>
       <Tab.Screen name={Screens.HOME} component={HomeScreen} />
       <Tab.Screen name={Screens.CONTACTS} component={ContactsScreen} />
@@ -55,6 +56,7 @@ const AppStack = () => {
       screenOptions={screenOptions}>
       <Stack.Screen name={Screens.TAB_SCREENS} component={TabScreens} />
       <Stack.Screen name={Screens.FRIENDS} component={FriendsScreen} />
+      <Stack.Screen name={Screens.COMMENT} component={CommentScreen} />
     </Stack.Navigator>
   );
 };

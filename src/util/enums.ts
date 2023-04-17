@@ -16,6 +16,7 @@ export enum TokenActionTypes {
 
 export enum Screens {
   HOME = 'Home',
+  COMMENT = 'Comment',
   SIGN_IN = 'SignIn',
   SIGN_UP = 'SignUp',
   CONTACTS = 'Contacts',
