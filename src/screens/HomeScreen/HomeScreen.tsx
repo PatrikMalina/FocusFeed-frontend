@@ -7,6 +7,8 @@ import {checkMe, allPosts} from '../../services/AppService';
 import Posts from '../../components/Post';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Post} from '../../util/interface';
+import { Screens } from '../../util/enums';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = ({navigation}: any) => {
   const {removeToken, removeUser, setUser} = bindActionCreators(
@@ -32,6 +34,18 @@ const HomeScreen = ({navigation}: any) => {
       });
   }, []);
 
+    useFocusEffect(
+    React.useCallback(() => {
+      allPosts()
+      .then(res => {
+        setPosts(res.data);
+      })
+      .catch(error => {
+        console.warn(error);
+      });
+    }, [])
+  );
+
   return (
     <View>
       <Button
@@ -46,7 +60,7 @@ const HomeScreen = ({navigation}: any) => {
         {posts.map((post, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => navigation.push('Comment', {post})}>
+            onPress={() => navigation.push(Screens.COMMENT, {post})}>
             <Posts post={post} key={index} />
           </TouchableOpacity>
         ))}

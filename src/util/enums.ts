@@ -22,6 +22,9 @@ export enum Screens {
   CONTACTS = 'Contacts',
   FRIENDS = 'Friends',
   TAB_SCREENS = 'Tab screens',
+  NEW_POST = 'NewPost',
+  PROFILE = 'Profile',
+  SETTINGS = 'Settings'
 }
 
 export enum FriendshipStatus {
