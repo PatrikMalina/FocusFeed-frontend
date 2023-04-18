@@ -14,6 +14,9 @@ import CommentScreen from '../screens/CommentScreen';
 import FriendsScreen from '../screens/FriendsScreen';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import ContactsScreen from '../screens/ContactsScreen';
+import NewPostScreen from '../screens/NewPostScreen/NewPostScreen';
+import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
+import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -37,13 +40,23 @@ const TabScreens = () => {
           if (routName === Screens.CONTACTS) {
             iconName = focused ? 'message' : 'message-outline';
           }
+
+          if (routName === Screens.NEW_POST) {
+            iconName = focused ? 'plus-box' : 'plus-box-outline';
+          }
+
+          if (routName === Screens.PROFILE) {
+            iconName = focused ? 'account' : 'account-outline';
+          }
           return <Icons name={iconName} size={size} color={'black'} />;
         },
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray',
       })}>
       <Tab.Screen name={Screens.HOME} component={HomeScreen} />
+      <Tab.Screen name={Screens.NEW_POST} component={NewPostScreen} />
       <Tab.Screen name={Screens.CONTACTS} component={ContactsScreen} />
+      <Tab.Screen name={Screens.PROFILE} component={ProfileScreen} />
     </Tab.Navigator>
   );
 };
@@ -56,6 +69,7 @@ const AppStack = () => {
       <Stack.Screen name={Screens.TAB_SCREENS} component={TabScreens} />
       <Stack.Screen name={Screens.FRIENDS} component={FriendsScreen} />
       <Stack.Screen name={Screens.COMMENT} component={CommentScreen} />
+      <Stack.Screen name={Screens.SETTINGS} component={SettingsScreen} />
     </Stack.Navigator>
   );
 };

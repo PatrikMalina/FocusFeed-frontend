@@ -36,3 +36,15 @@ export async function getFriends() {
 export async function addComment(id: number, text: string): Promise<AxiosResponse> {
   return axiosInstance.post('post/comment', {id, text})
 }
+
+export async function createPost(caption: string, picture: string): Promise<AxiosResponse> {
+  return axiosInstance.post('post/create', {caption, picture})
+}
+
+export async function deletePost(id: number): Promise<AxiosResponse> {
+  return axiosInstance.delete(`post/delete/${id}`)
+}
+
+export async function updateProfile(data: any): Promise<AxiosResponse> {
+  return axiosInstance.put('user/updateuser', {data})
+}
