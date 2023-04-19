@@ -1,11 +1,11 @@
-import {ActionTypes} from '../../util/enums';
-import {ActionsType, State} from '../../util/interface';
+import {UserActionTypes} from '../../util/enums';
+import {UserActionsType, State} from '../../util/interface';
 
-const reducer = (state: State = null, action: ActionsType) => {
+const reducer = (state: State = null, action: UserActionsType) => {
   switch (action.type) {
-    case ActionTypes.SET_USER:
+    case UserActionTypes.SET_USER:
       return (state = action.payload);
-    case ActionTypes.REMOVE_USER:
+    case UserActionTypes.REMOVE_USER:
       return (state = null);
 
     default:

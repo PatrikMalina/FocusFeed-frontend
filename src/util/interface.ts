@@ -1,4 +1,9 @@
-import {ActionTypes, TokenActionTypes} from './enums';
+import {
+  UserActionTypes,
+  ChatActionTypes,
+  MessageActionTypes,
+  TokenActionTypes,
+} from './enums';
 
 export interface User {
   id: number;
@@ -41,14 +46,25 @@ export interface AuthType {
   user?: User | null;
 }
 
-export interface ActionsType {
-  type: ActionTypes;
+export interface UserActionsType {
+  type: UserActionTypes;
   payload?: User | null;
 }
 
 export interface TokenActionsType {
   type: TokenActionTypes;
   payload?: Token | null;
+}
+
+export interface MessageActionsType {
+  type: MessageActionTypes;
+  payload?: Message[];
+  chatId?: number;
+}
+
+export interface ChatActionsType {
+  type: ChatActionTypes;
+  payload?: Chat[];
 }
 
 export interface Token {
@@ -70,7 +86,6 @@ export interface Chat {
   updatedAt: string;
   user_1: User;
   user_2: User;
-  lastMessage?: Message;
 }
 
 export type AuthToken = Token | undefined | null;

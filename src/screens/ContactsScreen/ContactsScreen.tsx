@@ -1,13 +1,12 @@
 import {FlatList, StyleSheet, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Avatar, Text} from 'react-native-paper';
 import AppColors from '../../styling/AppColors';
 import {Screens} from '../../util/enums';
-import {getChats, getLastMessage} from '../../services/AppService';
 import {API_URL} from '@env';
-import {Chat} from '../../util/interface';
+import {Chat, Message} from '../../util/interface';
 import store from '../../state/store';
 import {formatDistance} from 'date-fns';
 
@@ -29,9 +28,11 @@ const CustomUser = ({chat}: {chat: Chat}) => {
   const friend =
     chat.user_1.id !== store.getState().user?.id ? chat.user_1 : chat.user_2;
 
+  const lastMessage: Message = store.getState().messages[chat.id][0];
+
   const relativeDate = () => {
-    if (chat.lastMessage) {
-      const dateValue = new Date(chat.lastMessage?.createdAt);
+    if (lastMessage) {
+      const dateValue = new Date(lastMessage.createdAt);
       return formatDistance(dateValue, new Date(), {
         addSuffix: true,
       });
@@ -47,7 +48,7 @@ const CustomUser = ({chat}: {chat: Chat}) => {
       <View style={styles.user}>
         <Text style={styles.username}>{friend.username}</Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.lastText}>{chat.lastMessage?.content}</Text>
+          <Text style={styles.lastText}>{lastMessage.content}</Text>
           <Text style={styles.lastSeen}>{relativeDate()}</Text>
         </View>
       </View>
@@ -56,22 +57,7 @@ const CustomUser = ({chat}: {chat: Chat}) => {
 };
 
 const ContactsScreen = ({navigation}: any) => {
-  const [chats, setChats] = useState<Chat[]>([]);
-
-  useEffect(() => {
-    getChats().then(res => {
-      setChats(res.data);
-
-      let copyChats = Object.assign([], res.data);
-
-      copyChats.forEach((chat: Chat) => {
-        getLastMessage(chat.id).then(res => {
-          chat.lastMessage = res.data;
-          setChats(copyChats);
-        });
-      });
-    });
-  }, []);
+  const chats = store.getState().chats;
 
   return (
     <>

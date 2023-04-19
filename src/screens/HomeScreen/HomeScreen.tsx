@@ -1,49 +1,33 @@
 import {View, Button, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
-import {checkMe, allPosts} from '../../services/AppService';
+import {allPosts} from '../../services/AppService';
 import Posts from '../../components/Post';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Post} from '../../util/interface';
-import { Screens } from '../../util/enums';
-import { useFocusEffect } from '@react-navigation/native';
+import {Screens} from '../../util/enums';
+import {useFocusEffect} from '@react-navigation/native';
 
 const HomeScreen = ({navigation}: any) => {
-  const {removeToken, removeUser, setUser} = bindActionCreators(
+  const {removeToken, removeUser} = bindActionCreators(
     ActionCreators,
     useDispatch(),
   );
 
   const [posts, setPosts] = useState<Post[]>([]);
 
-  useEffect(() => {
-    checkMe().then(res => {
-      if (res !== undefined) {
-        setUser(res.data);
-      }
-    });
-
-    allPosts()
-      .then(res => {
-        setPosts(res.data);
-      })
-      .catch(error => {
-        console.warn(error);
-      });
-  }, []);
-
-    useFocusEffect(
+  useFocusEffect(
     React.useCallback(() => {
       allPosts()
-      .then(res => {
-        setPosts(res.data);
-      })
-      .catch(error => {
-        console.warn(error);
-      });
-    }, [])
+        .then(res => {
+          setPosts(res.data);
+        })
+        .catch(error => {
+          console.warn(error);
+        });
+    }, []),
   );
 
   return (

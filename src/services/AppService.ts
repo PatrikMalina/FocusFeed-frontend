@@ -25,26 +25,36 @@ export async function getChats() {
   return axiosInstance.get('chat');
 }
 
-export async function getLastMessage(chatId: number) {
-  return axiosInstance.post('chat/lastMessage', {chatId});
-}
-
 export async function getFriends() {
   return axiosInstance.get('friends');
 }
 
-export async function addComment(id: number, text: string): Promise<AxiosResponse> {
-  return axiosInstance.post('post/comment', {id, text})
+export async function addComment(
+  id: number,
+  text: string,
+): Promise<AxiosResponse> {
+  return axiosInstance.post('post/comment', {id, text});
 }
 
-export async function createPost(caption: string, picture: string): Promise<AxiosResponse> {
-  return axiosInstance.post('post/create', {caption, picture})
+export async function createPost(
+  caption: string,
+  picture: string,
+): Promise<AxiosResponse> {
+  return axiosInstance.post('post/create', {caption, picture});
 }
 
 export async function deletePost(id: number): Promise<AxiosResponse> {
-  return axiosInstance.delete(`post/delete/${id}`)
+  return axiosInstance.delete(`post/delete/${id}`);
 }
 
 export async function updateProfile(data: any): Promise<AxiosResponse> {
-  return axiosInstance.put('user/updateuser', {data})
+  return axiosInstance.put('user/updateuser', {data});
+}
+
+export async function getMessages(
+  chatId: number,
+  paging: number,
+  perPage: number,
+): Promise<AxiosResponse> {
+  return axiosInstance.put('chat/loadMessages', {chatId, paging, perPage});
 }

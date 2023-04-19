@@ -1,10 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ActionTypes, TokenActionTypes} from '../../util/enums';
-import {AuthToken, State} from '../../util/interface';
+import {
+  UserActionTypes,
+  TokenActionTypes,
+  ChatActionTypes,
+  MessageActionTypes,
+} from '../../util/enums';
+import {AuthToken, Chat, Message, State} from '../../util/interface';
 import {Dispatch} from 'redux';
 
 interface UserDispatchType {
-  type: ActionTypes;
+  type: UserActionTypes;
   payload: State;
 }
 
@@ -13,10 +18,21 @@ interface TokenDispatchType {
   payload: AuthToken;
 }
 
+interface ChatDispatchType {
+  type: ChatActionTypes;
+  payload: Chat[];
+}
+
+interface MessageDispatchType {
+  type: MessageActionTypes;
+  payload: Message[];
+  chatId?: number;
+}
+
 export const setUser = (user: State) => {
   return (dispatch: Dispatch<UserDispatchType>) => {
     dispatch({
-      type: ActionTypes.SET_USER,
+      type: UserActionTypes.SET_USER,
       payload: user,
     });
   };
@@ -25,7 +41,7 @@ export const setUser = (user: State) => {
 export const removeUser = () => {
   return (dispatch: Dispatch<UserDispatchType>) => {
     dispatch({
-      type: ActionTypes.REMOVE_USER,
+      type: UserActionTypes.REMOVE_USER,
       payload: null,
     });
   };
@@ -60,6 +76,25 @@ export const removeToken = () => {
     dispatch({
       type: TokenActionTypes.REMOVE_TOKEN,
       payload: null,
+    });
+  };
+};
+
+export const setChats = (chats: Chat[]) => {
+  return (dispatch: Dispatch<ChatDispatchType>) => {
+    dispatch({
+      type: ChatActionTypes.SET_CHATS,
+      payload: chats,
+    });
+  };
+};
+
+export const setMessages = (messages: Message[], chatId?: number) => {
+  return (dispatch: Dispatch<MessageDispatchType>) => {
+    dispatch({
+      type: MessageActionTypes.SET_MESSAGES,
+      payload: messages,
+      chatId: chatId,
     });
   };
 };

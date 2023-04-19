@@ -4,7 +4,7 @@ export enum CustomTypes {
   TERTIARY = 'tertiary',
 }
 
-export enum ActionTypes {
+export enum UserActionTypes {
   SET_USER = 'setUser',
   REMOVE_USER = 'removeUser',
 }
@@ -12,6 +12,16 @@ export enum ActionTypes {
 export enum TokenActionTypes {
   SET_TOKEN = 'setToken',
   REMOVE_TOKEN = 'removeToken',
+}
+
+export enum MessageActionTypes {
+  SET_MESSAGES = 'setMessages',
+  ADD_MESSAGE = 'addMessage',
+}
+
+export enum ChatActionTypes {
+  SET_CHATS = 'setChats',
+  ADD_CHAT = 'addChat',
 }
 
 export enum Screens {
@@ -24,7 +34,7 @@ export enum Screens {
   TAB_SCREENS = 'Tab screens',
   NEW_POST = 'NewPost',
   PROFILE = 'Profile',
-  SETTINGS = 'Settings'
+  SETTINGS = 'Settings',
 }
 
 export enum FriendshipStatus {

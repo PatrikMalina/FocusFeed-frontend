@@ -7,8 +7,8 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import {Screens} from '../util/enums';
 import {RootState} from '../state';
-import {useSelector} from 'react-redux';
-import {Token} from '../util/interface';
+import {useDispatch, useSelector} from 'react-redux';
+import {Chat, Token} from '../util/interface';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CommentScreen from '../screens/CommentScreen';
 import FriendsScreen from '../screens/FriendsScreen';
@@ -17,7 +17,10 @@ import ContactsScreen from '../screens/ContactsScreen';
 import NewPostScreen from '../screens/NewPostScreen/NewPostScreen';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
+import * as ActionCreators from '../state/action-creators';
+import {bindActionCreators} from 'redux';
 import ActivityService from '../services/ActivityService';
+import {checkMe, getChats, getMessages} from '../services/AppService';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,8 +66,44 @@ const TabScreens = () => {
 };
 
 const AppStack = () => {
-  useEffect(() => {
+  const {setChats, setMessages, setUser} = bindActionCreators(
+    ActionCreators,
+    useDispatch(),
+  );
+
+  const initialization = () => {
+    // Get the current user information
+    checkMe()
+      .then(res => {
+        if (res !== undefined) {
+          setUser(res.data);
+        }
+      })
+      .catch(e => console.warn(e));
+
+    // Make a websocket connection
     ActivityService.connectSocket();
+
+    // Get all chats and messages related to the chats
+    getChats()
+      .then(res => {
+        const chats: Chat[] = res.data;
+
+        setChats(chats);
+
+        chats.forEach((chat: Chat) => {
+          getMessages(chat.id, 1, 7)
+            .then(res => {
+              setMessages(res.data, chat.id);
+            })
+            .catch(e => console.warn(e));
+        });
+      })
+      .catch(e => console.warn(e));
+  };
+
+  useEffect(() => {
+    initialization();
   }, []);
 
   return (
