@@ -17,6 +17,7 @@ import ContactsScreen from '../screens/ContactsScreen';
 import NewPostScreen from '../screens/NewPostScreen/NewPostScreen';
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
+import ActivityService from '../services/ActivityService';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,6 +63,10 @@ const TabScreens = () => {
 };
 
 const AppStack = () => {
+  useEffect(() => {
+    ActivityService.connectSocket();
+  }, []);
+
   return (
     <Stack.Navigator
       initialRouteName={Screens.TAB_SCREENS}
