@@ -34,7 +34,7 @@ function SignInScreen({navigation}: any) {
 
   return (
     <View style={styles.root}>
-      <View style={[styles.logo, {height: height * 0.3}]}>
+      <View style={[styles.logo, {height: height * 0.4}]}>
         <LogoIcon />
       </View>
 
@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     width: '50%',
     maxWidth: 400,
     height: 200,
+    justifyContent: 'center',
   },
 });
 
