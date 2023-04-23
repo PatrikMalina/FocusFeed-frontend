@@ -11,6 +11,7 @@ import ChatService from '../../services/ChatService';
 import {useDispatch, useSelector} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
+import {getMessages} from '../../services/AppService';
 
 const TopHeader = ({goBack, friend}: {goBack: any; friend: User}) => {
   return (
@@ -99,13 +100,18 @@ const InputMessage = ({setFocus, sendMessage}: any) => {
 };
 
 const ChatScreen = ({route, navigation: {goBack}}: any) => {
-  const {addMessages} = bindActionCreators(ActionCreators, useDispatch());
+  const {addMessages, loadMessages} = bindActionCreators(
+    ActionCreators,
+    useDispatch(),
+  );
 
   const chat: Chat = route.params.chat;
   const friend =
     chat.user_1.id !== store.getState().user?.id ? chat.user_1 : chat.user_2;
 
   const [isFocused, setIsFocused] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const messages = useSelector((state: RootState) => state.messages)[chat.id];
 
   function sendMessage(message: string) {
@@ -119,6 +125,32 @@ const ChatScreen = ({route, navigation: {goBack}}: any) => {
       });
   }
 
+  function loadMore() {
+    if (!fetching) return;
+
+    setIsRefreshing(true);
+    let perPage = 5;
+    let paging = 0;
+
+    let len = messages.length;
+
+    let offset = len % perPage;
+
+    if (offset !== 0) perPage += offset;
+
+    paging = (len - offset) / perPage + 1;
+    offset = offset * -1;
+    getMessages(chat.id, paging, perPage, offset)
+      .then(res => {
+        if (res.data.length < perPage) setFetching(false);
+        loadMessages(res.data, chat.id);
+        setIsRefreshing(false);
+      })
+      .catch(e => {
+        console.warn(e);
+      });
+  }
+
   return (
     <View>
       <TopHeader goBack={goBack} friend={friend} />
@@ -129,13 +161,14 @@ const ChatScreen = ({route, navigation: {goBack}}: any) => {
         ]}>
         <FlatList
           data={messages}
-          // onEndReached={this.endReached}
-          // onEndReachedThreshold={0.7}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
           renderItem={({item}) => (
             <MessageBobble message={item} friend={friend} />
           )}
           inverted
           showsVerticalScrollIndicator={false}
+          refreshing={isRefreshing}
         />
       </View>
 

@@ -17,6 +17,7 @@ export enum TokenActionTypes {
 export enum MessageActionTypes {
   SET_MESSAGES = 'setMessages',
   ADD_MESSAGE = 'addMessage',
+  LOAD_MESSAGES = 'loadMessages',
 }
 
 export enum ChatActionTypes {

@@ -30,6 +30,18 @@ const messageReducer = (
         };
       }
 
+    case MessageActionTypes.LOAD_MESSAGES:
+      if (action.payload && action.chatId) {
+        const messages: Message[] = state[action.chatId];
+
+        const messageObj: MessageStore = {};
+        messageObj[action.chatId] = messages.concat(action.payload);
+        return {
+          ...state,
+          ...messageObj,
+        };
+      }
+
     default:
       return state;
   }

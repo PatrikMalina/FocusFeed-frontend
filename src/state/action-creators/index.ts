@@ -108,3 +108,13 @@ export const addMessages = (messages: Message, chatId: number) => {
     });
   };
 };
+
+export const loadMessages = (messages: Message[], chatId: number) => {
+  return (dispatch: Dispatch<MessageDispatchType>) => {
+    dispatch({
+      type: MessageActionTypes.LOAD_MESSAGES,
+      payload: messages,
+      chatId: chatId,
+    });
+  };
+};
