@@ -20,9 +20,12 @@ const messageReducer = (
 
     case MessageActionTypes.ADD_MESSAGE:
       if (action.payload && action.chatId) {
-        const messageObj: MessageStore = {...state};
-        messageObj[action.chatId].push(...action.payload);
+        const messages: Message[] = state[action.chatId];
+
+        const messageObj: MessageStore = {};
+        messageObj[action.chatId] = action.payload.concat(messages);
         return {
+          ...state,
           ...messageObj,
         };
       }

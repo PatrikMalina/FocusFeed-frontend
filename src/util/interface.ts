@@ -75,7 +75,7 @@ export interface Token {
 
 export interface Message {
   id: number;
-  author: User;
+  createdBy: number;
   content: string;
   createdAt: string;
 }

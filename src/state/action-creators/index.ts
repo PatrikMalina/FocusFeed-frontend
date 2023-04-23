@@ -89,11 +89,21 @@ export const setChats = (chats: Chat[]) => {
   };
 };
 
-export const setMessages = (messages: Message[], chatId?: number) => {
+export const setMessages = (messages: Message[], chatId: number) => {
   return (dispatch: Dispatch<MessageDispatchType>) => {
     dispatch({
       type: MessageActionTypes.SET_MESSAGES,
       payload: messages,
+      chatId: chatId,
+    });
+  };
+};
+
+export const addMessages = (messages: Message, chatId: number) => {
+  return (dispatch: Dispatch<MessageDispatchType>) => {
+    dispatch({
+      type: MessageActionTypes.ADD_MESSAGE,
+      payload: [messages],
       chatId: chatId,
     });
   };

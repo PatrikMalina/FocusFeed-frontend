@@ -21,6 +21,8 @@ import * as ActionCreators from '../state/action-creators';
 import {bindActionCreators} from 'redux';
 import ActivityService from '../services/ActivityService';
 import {checkMe, getChats, getMessages} from '../services/AppService';
+import ChatScreen from '../screens/ChatScreen';
+import ChatService from '../services/ChatService';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -88,11 +90,12 @@ const AppStack = () => {
     getChats()
       .then(res => {
         const chats: Chat[] = res.data;
-
         setChats(chats);
 
         chats.forEach((chat: Chat) => {
-          getMessages(chat.id, 1, 7)
+          ChatService.join(chat.id);
+
+          getMessages(chat.id)
             .then(res => {
               setMessages(res.data, chat.id);
             })
@@ -114,6 +117,7 @@ const AppStack = () => {
       <Stack.Screen name={Screens.FRIENDS} component={FriendsScreen} />
       <Stack.Screen name={Screens.COMMENT} component={CommentScreen} />
       <Stack.Screen name={Screens.SETTINGS} component={SettingsScreen} />
+      <Stack.Screen name={Screens.CHAT} component={ChatScreen} />
     </Stack.Navigator>
   );
 };

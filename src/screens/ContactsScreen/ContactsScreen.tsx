@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -6,9 +6,10 @@ import {Avatar, Text} from 'react-native-paper';
 import AppColors from '../../styling/AppColors';
 import {Screens} from '../../util/enums';
 import {API_URL} from '@env';
-import {Chat, Message} from '../../util/interface';
-import store from '../../state/store';
+import {Chat} from '../../util/interface';
+import store, {RootState} from '../../state/store';
 import {formatDistance} from 'date-fns';
+import {useSelector} from 'react-redux';
 
 const CustomSearch = () => {
   return (
@@ -25,10 +26,11 @@ const CustomSearch = () => {
 };
 
 const CustomUser = ({chat}: {chat: Chat}) => {
+  const messages = useSelector((state: RootState) => state.messages);
+  const lastMessage = messages[chat.id][0];
+
   const friend =
     chat.user_1.id !== store.getState().user?.id ? chat.user_1 : chat.user_2;
-
-  const lastMessage: Message = store.getState().messages[chat.id][0];
 
   const relativeDate = () => {
     if (lastMessage) {
@@ -57,7 +59,8 @@ const CustomUser = ({chat}: {chat: Chat}) => {
 };
 
 const ContactsScreen = ({navigation}: any) => {
-  const chats = store.getState().chats;
+  const chats = useSelector((state: RootState) => state.chats);
+  const messages = useSelector((state: RootState) => state.messages);
 
   return (
     <>
@@ -76,7 +79,13 @@ const ContactsScreen = ({navigation}: any) => {
       <View style={styles.container}>
         <FlatList
           data={chats}
-          renderItem={({item}) => <CustomUser chat={item} />}
+          extraData={[chats, messages]}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              onPress={() => navigation.push(Screens.CHAT, {chat: item})}>
+              <CustomUser chat={item} />
+            </TouchableOpacity>
+          )}
         />
       </View>
     </>

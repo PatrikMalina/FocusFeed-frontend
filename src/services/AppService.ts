@@ -53,8 +53,9 @@ export async function updateProfile(data: any): Promise<AxiosResponse> {
 
 export async function getMessages(
   chatId: number,
-  paging: number,
-  perPage: number,
+  paging: number = 1,
+  perPage: number = 15,
+  offset: number = 0,
 ): Promise<AxiosResponse> {
   return axiosInstance.put('chat/loadMessages', {chatId, paging, perPage});
 }
