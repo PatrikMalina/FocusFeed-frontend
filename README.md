@@ -43,6 +43,10 @@ For the animation library we are using [Lottie](https://github.com/lottie-react-
 
 Splash animation taken from [here](https://lottiefiles.com/65554-water-splash)
 
+#### Forma validation
+
+For validating form we are using [formik](https://github.com/bamlab/react-native-formik) for forms and [yup](https://github.com/jquense/yup) form scheme validation
+
 #### Wireframe
 
 Designe of screens [here](https://www.figma.com/file/HNEPUxCzjilcApUuSZhSc2/Untitled?node-id=0-1)

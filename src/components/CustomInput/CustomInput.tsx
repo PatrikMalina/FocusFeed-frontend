@@ -1,89 +1,122 @@
-import {View, TextInput, StyleSheet} from 'react-native';
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import {View, TextInput, StyleSheet, Text} from 'react-native';
+import React, {useState} from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppColors from '../../styling/AppColors';
 
-type CustomInput = {
-  value: string;
-  setValue: Dispatch<SetStateAction<string>>;
-  placeholder: string;
-  iconName: string;
-  iconSize: number;
-  isPassword?: boolean;
-};
+const CustomInput = (props: any) => {
+  const {
+    field: {name, onChange, value},
+    form: {errors},
+    placeholder,
+    iconName,
+    iconSize,
+    isPassword = false,
+    ...inputProps
+  } = props;
 
-const CustomInput = ({
-  value,
-  setValue,
-  placeholder,
-  iconName,
-  iconSize,
-  isPassword = false,
-}: CustomInput) => {
   const [notShown, setNotShown] = useState(true);
+
+  const hasError = errors[name] && value !== '';
+  const isCorrect = !errors[name] && value !== '';
+
+  const borderColor = hasError
+    ? 'red'
+    : isCorrect
+    ? AppColors.BUTTON_PRIMARY
+    : styles.container.borderBottomColor;
+
   return (
-    <View style={styles.root}>
-      <View style={styles.container}>
-        <TextInput
-          value={value}
-          onChangeText={setValue}
-          placeholder={placeholder}
-          style={styles.input}
-          secureTextEntry={isPassword && notShown}
-        />
-      </View>
-      <View style={styles.icon}>
-        {isPassword === false ? (
-          <MaterialIcons.Button
-            backgroundColor={AppColors.DEFAULT_BACKGROUND}
-            color="gray"
-            name={iconName}
-            size={iconSize}
-            style={{
-              paddingRight: 0,
-              paddingVertical: 2,
-            }}
+    <>
+      <View style={styles.root}>
+        <View
+          style={[
+            styles.container,
+            {
+              borderBottomColor: borderColor,
+            },
+          ]}>
+          <TextInput
+            value={value}
+            onChangeText={text => onChange(name)(text)}
+            placeholder={placeholder}
+            style={styles.input}
+            secureTextEntry={isPassword && notShown}
+            {...inputProps}
           />
-        ) : (
-          <MaterialIcons.Button
-            backgroundColor={AppColors.DEFAULT_BACKGROUND}
-            color={notShown ? 'gray' : 'black'}
-            name={iconName}
-            size={iconSize}
-            onPress={() => setNotShown(!notShown)}
-            style={{
-              paddingRight: 0,
-              paddingVertical: 2,
-            }}
-          />
-        )}
+        </View>
+        <View
+          style={[
+            styles.icon,
+            {
+              borderBottomColor: borderColor,
+            },
+          ]}>
+          {isPassword === false ? (
+            <MaterialIcons.Button
+              backgroundColor={AppColors.DEFAULT_BACKGROUND}
+              color="gray"
+              name={iconName}
+              size={iconSize}
+              style={{
+                paddingRight: 0,
+                paddingVertical: 2,
+              }}
+            />
+          ) : (
+            <MaterialIcons.Button
+              backgroundColor={AppColors.DEFAULT_BACKGROUND}
+              color={notShown ? 'gray' : 'black'}
+              name={iconName}
+              size={iconSize}
+              onPress={() => setNotShown(!notShown)}
+              style={{
+                paddingRight: 0,
+                paddingVertical: 2,
+              }}
+            />
+          )}
+        </View>
       </View>
-    </View>
+      <View style={styles.errorMessage}>
+        {hasError && <Text style={styles.errorText}>{errors[name]}</Text>}
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    paddingVertical: 15,
+    paddingTop: 15,
+    paddingBottom: 2,
     flexDirection: 'row',
   },
 
   container: {
     width: '90%',
     paddingVertical: 2,
-    borderBottomColor: 'black',
-    borderBottomWidth: 0.8,
+    borderBottomColor: AppColors.INPUT_BORDER_COLOR,
+    borderBottomWidth: 1,
   },
 
   icon: {
-    borderBottomColor: 'black',
-    borderBottomWidth: 0.8,
+    borderBottomColor: AppColors.INPUT_BORDER_COLOR,
+    borderBottomWidth: 1,
   },
 
   input: {
     paddingHorizontal: 0,
     paddingVertical: 0,
+  },
+
+  errorMessage: {
+    marginTop: 2,
+    height: '3%',
+  },
+
+  errorText: {
+    fontSize: 13,
+    color: 'red',
   },
 });
 

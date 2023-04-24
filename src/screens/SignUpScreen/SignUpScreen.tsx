@@ -1,23 +1,14 @@
-import {
-  View,
-  Image,
-  StyleSheet,
-  useWindowDimensions,
-  ScrollView,
-} from 'react-native';
-import React, {useState} from 'react';
+import {View, StyleSheet, useWindowDimensions, ScrollView} from 'react-native';
+import React from 'react';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {CustomTypes, Screens} from '../../util/enums';
 import {registerUser} from '../../services/AuthService';
 import LogoIcon from '../../components/LogoIcon/LogoIcon';
+import {Formik, Field} from 'formik';
+import * as yup from 'yup';
 
 const SignUpScreen = ({navigation}: any) => {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
   const {height} = useWindowDimensions();
 
   const onRegister = (
@@ -35,49 +26,96 @@ const SignUpScreen = ({navigation}: any) => {
       });
   };
 
+  const validationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email('Email is not in valid format!')
+      .required('Email is required!'),
+    username: yup
+      .string()
+      .min(5, 'Username must contain at least 5 characters!')
+      .max(30, 'Username must contain less then 30 characters!')
+      .required('Username is required!'),
+    password: yup
+      .string()
+      .min(8, 'Password must contain at least 8 characters!')
+      .max(64, 'Password must contain less then 64 characters!')
+      .required('Password is required!'),
+    passwordConfirmation: yup
+      .string()
+      .oneOf([yup.ref('password')], 'Passwords must match!')
+      .required('Password confirmation is required!'),
+  });
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.root}>
+      <View style={[styles.root, {height: height * 1}]}>
         <View style={[styles.logo, {height: height * 0.3}]}>
           <LogoIcon />
         </View>
 
-        <CustomInput
-          placeholder="Email"
-          value={email}
-          setValue={setEmail}
-          iconName="email-outline"
-          iconSize={30}
-        />
+        <Formik
+          validationSchema={validationSchema}
+          initialValues={{
+            email: '',
+            username: '',
+            password: '',
+            passwordConfirmation: '',
+          }}
+          validateOnChange={true}
+          validateOnBlur={true}
+          onSubmit={values =>
+            onRegister(
+              values.username,
+              values.email,
+              values.password,
+              values.passwordConfirmation,
+            )
+          }>
+          {({handleSubmit, isValid}) => (
+            <>
+              <Field
+                component={CustomInput}
+                name="email"
+                placeholder="Email"
+                iconName="email-outline"
+                iconSize={30}
+              />
 
-        <CustomInput
-          placeholder="Username"
-          value={username}
-          setValue={setUsername}
-          iconName="account-outline"
-          iconSize={30}
-        />
-        <CustomInput
-          placeholder="Password"
-          value={password}
-          setValue={setPassword}
-          iconName="lock-outline"
-          iconSize={30}
-          isPassword
-        />
-        <CustomInput
-          placeholder="Confirm password"
-          value={confirmPassword}
-          setValue={setConfirmPassword}
-          iconName="lock-outline"
-          iconSize={30}
-          isPassword
-        />
+              <Field
+                component={CustomInput}
+                name="username"
+                placeholder="Username"
+                iconName="account-outline"
+                iconSize={30}
+              />
 
-        <CustomButton
-          onPress={() => onRegister(username, email, password, confirmPassword)}
-          text="Register"
-        />
+              <Field
+                component={CustomInput}
+                name="password"
+                placeholder="Password"
+                iconName="lock-outline"
+                iconSize={30}
+                isPassword
+              />
+
+              <Field
+                component={CustomInput}
+                name="passwordConfirmation"
+                placeholder="Confirm password"
+                iconName="lock-outline"
+                iconSize={30}
+                isPassword
+              />
+
+              <CustomButton
+                onPress={handleSubmit}
+                text="Register"
+                disabled={!isValid}
+              />
+            </>
+          )}
+        </Formik>
 
         <CustomButton
           onPress={() => navigation.push(Screens.SIGN_IN)}

@@ -1,5 +1,5 @@
 import {View, StyleSheet, useWindowDimensions} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {CustomTypes, Screens} from '../../util/enums';
@@ -8,12 +8,11 @@ import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
 import {loginUser} from '../../services/AuthService';
 import LogoIcon from '../../components/LogoIcon/LogoIcon';
+import {Formik, Field} from 'formik';
+import * as yup from 'yup';
 
 function SignInScreen({navigation}: any) {
   const {setToken} = bindActionCreators(ActionCreators, useDispatch());
-
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
   const {height} = useWindowDimensions();
 
@@ -32,29 +31,61 @@ function SignInScreen({navigation}: any) {
       });
   };
 
+  const validationSchema = yup.object().shape({
+    username: yup
+      .string()
+      .min(5, 'Username must contain at least 5 characters!')
+      .max(30, 'Username must contain less then 30 characters!')
+      .required('Username is required!'),
+    password: yup
+      .string()
+      .min(8, 'Password must contain at least 8 characters!')
+      .max(64, 'Password must contain less then 64 characters!')
+      .required('password is required!'),
+  });
+
   return (
     <View style={styles.root}>
       <View style={[styles.logo, {height: height * 0.4}]}>
         <LogoIcon />
       </View>
 
-      <CustomInput
-        placeholder="Username"
-        value={username}
-        setValue={setUsername}
-        iconName="account-outline"
-        iconSize={30}
-      />
-      <CustomInput
-        placeholder="Password"
-        value={password}
-        setValue={setPassword}
-        iconName="lock-outline"
-        iconSize={30}
-        isPassword
-      />
+      <Formik
+        validationSchema={validationSchema}
+        initialValues={{
+          username: '',
+          password: '',
+        }}
+        validateOnChange={true}
+        validateOnBlur={true}
+        onSubmit={values => onLogin(values.username, values.password)}>
+        {({handleSubmit, isValid}) => (
+          <>
+            <Field
+              component={CustomInput}
+              name="username"
+              placeholder="Username"
+              iconName="account-outline"
+              iconSize={30}
+            />
 
-      <CustomButton onPress={() => onLogin(username, password)} text="Login" />
+            <Field
+              component={CustomInput}
+              name="password"
+              placeholder="Password"
+              iconName="lock-outline"
+              iconSize={30}
+              isPassword
+            />
+
+            <CustomButton
+              onPress={handleSubmit}
+              text="Login"
+              disabled={!isValid}
+            />
+          </>
+        )}
+      </Formik>
 
       <CustomButton
         onPress={() => navigation.push(Screens.SIGN_UP)}

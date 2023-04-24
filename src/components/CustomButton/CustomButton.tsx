@@ -7,17 +7,24 @@ type CustomButton = {
   onPress: () => void;
   text: string;
   type?: CustomTypes;
+  disabled?: boolean;
 };
 
 const CustomButton = ({
   onPress,
   text,
   type = CustomTypes.PRIMARY,
+  disabled = false,
 }: CustomButton) => {
   return (
     <Pressable
+      disabled={disabled}
       onPress={onPress}
-      style={[styles.container, styles[`container_${type}`]]}>
+      style={[
+        styles.container,
+        styles[`container_${type}`],
+        {opacity: disabled ? 0.3 : 1},
+      ]}>
       <Text style={[styles.text, styles[`text_${type}`]]}>{text}</Text>
     </Pressable>
   );

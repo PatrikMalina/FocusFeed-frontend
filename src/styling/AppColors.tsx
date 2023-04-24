@@ -3,6 +3,8 @@ const general: Record<string, string> = {
 
   PRIMARY: 'white',
 
+  INPUT_BORDER_COLOR: '#706f6f',
+
   // Button colors
   BUTTON_PRIMARY: '#4182EE',
   BUTTON_PRIMARY_TEXT: 'white',
