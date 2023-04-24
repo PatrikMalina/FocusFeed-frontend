@@ -21,6 +21,10 @@ export interface Post {
   comments: Comment[];
   createdByUsername: string;
   profilePictureUrl: string;
+  location: {
+    x: number;
+    y: number;
+  } | null;
 }
 
 export interface Like {

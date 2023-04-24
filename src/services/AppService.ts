@@ -39,8 +39,10 @@ export async function addComment(
 export async function createPost(
   caption: string,
   picture: string,
+  longitude: number | undefined,
+  latitude: number | undefined
 ): Promise<AxiosResponse> {
-  return axiosInstance.post('post/create', {caption, picture});
+  return axiosInstance.post('post/create', {caption, picture, longitude, latitude});
 }
 
 export async function deletePost(id: number): Promise<AxiosResponse> {
