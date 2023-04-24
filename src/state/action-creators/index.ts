@@ -7,6 +7,7 @@ import {
 } from '../../util/enums';
 import {AuthToken, Chat, Message, State} from '../../util/interface';
 import {Dispatch} from 'redux';
+import store from '../store';
 
 interface UserDispatchType {
   type: UserActionTypes;
@@ -63,6 +64,19 @@ export const setToken = (token: AuthToken, saveToStorage: boolean = true) => {
       payload: token,
     });
   };
+};
+
+export const unauthorized = () => {
+  try {
+    AsyncStorage.removeItem('@token');
+  } catch (e) {
+    console.warn(e);
+  }
+
+  store.dispatch({
+    type: TokenActionTypes.REMOVE_TOKEN,
+    payload: null,
+  });
 };
 
 export const removeToken = () => {
