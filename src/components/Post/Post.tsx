@@ -1,6 +1,6 @@
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, Linking} from 'react-native';
 import {Divider} from 'react-native-elements';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {likePost} from '../../services/AppService';
 import {Post} from '../../util/interface';
 import {API_URL} from '@env';
@@ -11,10 +11,33 @@ interface Props {
 }
 
 const Posts: React.FC<Props> = ({post}) => {
-  const hasUserLikedPost = post.likes.find(
-    like => like.userId == store.getState().user?.id,
-  );
-  
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(post.likes.length);
+
+  const handleLikePost = async () => {
+    try {
+      await likePost(post.id);
+      setLiked(true);
+      setLikesCount(prevCount => prevCount + 1);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const openMap = () => {
+    const x = post.location?.x
+    const y = post.location?.y
+    const url = `https://www.google.com/maps/search/?api=1&query=${y},${x}`;
+    Linking.openURL(url);
+  };
+
+  useEffect(() => {
+    const hasUserLikedPost = post.likes.some(
+      like => like.userId == store.getState().user?.id,
+    );
+    setLiked(hasUserLikedPost);   
+  }, [post.likes]);
+ 
   return (
     <View style={{marginBottom: 60}}>
       <Divider width={1} orientation="vertical" />
@@ -50,11 +73,11 @@ const Posts: React.FC<Props> = ({post}) => {
       </View>
 
       <View style={{marginLeft: '10%', flexDirection: 'row'}}>
-        <TouchableOpacity onPress={() => likePost(post.id)}>
+        <TouchableOpacity onPress={() => {if (!liked){handleLikePost()}}}>
           <Image
             style={{width: 30, height: 30}}
             source={{
-              uri: hasUserLikedPost
+              uri: liked
                 ? `${API_URL}/images/like.png`
                 : `${API_URL}/images/nolike.png`,
             }}
@@ -67,9 +90,16 @@ const Posts: React.FC<Props> = ({post}) => {
             fontWeight: '600',
             fontSize: 12,
           }}>
-          {post.likes.length} likes
+          {likesCount} likes
         </Text>
       </View>
+        {post.location && (
+          <TouchableOpacity onPress={openMap} style={{marginLeft: '10%'}}>
+        <Text style={{fontWeight: '600', fontSize: 14}}>
+          Location
+        </Text>
+        </TouchableOpacity>
+    )}
 
       <View style={{marginTop: 5}}>
         <Text style={{marginLeft: '10%', fontWeight: '600'}}>

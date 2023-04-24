@@ -29,8 +29,8 @@ const CommentScreen = ({ route, navigation: {goBack}, navigation }: any) => {
     <View style={{ flex: 1 }}>
     <ScrollView style={{marginBottom: 60}}>
       <Posts post={post} />
-      {post.comments.map((comment: Comment) => (
-        <Comments comment={comment} />
+      {post.comments.map((comment: Comment, index: React.Key | null | undefined) => (
+        <Comments comment={comment} key={index}/>
       ))}
     </ScrollView>
     </View>

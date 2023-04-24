@@ -6,8 +6,16 @@ import CustomButton from '../../components/CustomButton/CustomButton'
 import { deletePost, myPosts } from '../../services/AppService'
 import { Post } from '../../util/interface'
 import { Screens } from '../../util/enums'
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { bindActionCreators } from 'redux'
+import * as ActionCreators from '../../state/action-creators';
+import { useDispatch } from 'react-redux'
 
 const ProfileScreen = ( {navigation}: any) => {
+  const {removeToken, removeUser} = bindActionCreators(
+    ActionCreators,
+    useDispatch(),
+  );
     const user = store.getState().user
     const [posts, setPosts] = useState<Post[]>([]);
 
@@ -52,6 +60,13 @@ const ProfileScreen = ( {navigation}: any) => {
   return (
     <ScrollView>
       <View style={styles.header}>
+        <View style={{margin: 5, position: 'absolute', top: 0, right: 0 }}>
+          <Icons name={'logout'} size={40} color={'black'} onPress={() => {
+          removeToken();
+          removeUser();
+          console.log('sign out');
+        }}/>
+        </View>
         <View style={styles.profileImageContainer}>
             <Image source={{ uri: `${API_URL}/`+user?.pictureUrl }} style={{flex: 1}} />
         </View>
