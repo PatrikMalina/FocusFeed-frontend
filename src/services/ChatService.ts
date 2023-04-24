@@ -1,15 +1,20 @@
+import {useDispatch} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {Message} from '../util/interface';
 import {SocketManager} from './SocketManager';
+import store from '../state/store';
+import {MessageActionTypes} from '../util/enums';
 
-// creating instance of this class automatically connects to given socket.io namespace
-// subscribe is called with boot params, so you can use it to dispatch actions for socket events
-// you have access to socket.io socket using this.socket
 class ChatSocketManager extends SocketManager {
   public subscribe(): void {
     const chatId = Number(this.namespace.split('/').pop() as string);
 
     this.socket.on('message', (message: Message) => {
-      console.log('new message', message);
+      store.dispatch({
+        type: MessageActionTypes.ADD_MESSAGE,
+        payload: [message],
+        chatId: chatId,
+      });
     });
   }
 
