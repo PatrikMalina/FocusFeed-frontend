@@ -23,6 +23,8 @@ import ActivityService from '../services/ActivityService';
 import {checkMe, getChats, getMessages} from '../services/AppService';
 import ChatScreen from '../screens/ChatScreen';
 import ChatService from '../services/ChatService';
+import {API_URL} from '@env';
+import {SocketManager} from '../services/SocketManager';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -84,6 +86,8 @@ const AppStack = () => {
       .catch(e => console.warn(e));
 
     // Make a websocket connection
+    SocketManager.createManager(API_URL);
+    SocketManager.boot();
     ActivityService.connectSocket();
 
     // Get all chats and messages related to the chats

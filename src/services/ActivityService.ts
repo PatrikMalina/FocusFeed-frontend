@@ -1,4 +1,3 @@
-import {API_URL} from '@env';
 import {User} from '../util/interface';
 import {SocketManager} from './SocketManager';
 
@@ -18,7 +17,6 @@ class ActivitySocketManager extends SocketManager {
   }
 
   public connectSocket() {
-    SocketManager.createManager(API_URL);
     this.socket.connect();
   }
 

@@ -5,7 +5,7 @@ import {DEBUG} from '@env';
 export interface SocketManagerContract {
   namespace: string;
   readonly socket: Socket;
-  subscribe(params: any): void;
+  subscribe(): void;
   destroy(): void;
 }
 
@@ -69,19 +69,12 @@ export abstract class SocketManager implements SocketManagerContract {
 
   private static bootInstance(instance: SocketManagerContract): void {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    instance.subscribe(this.params!);
+    instance.subscribe();
     // connect socket - if it was not used in subscribe it will be created
     instance.socket.connect();
   }
 
-  public static boot(params: any): void {
-    if (this.params) {
-      throw new Error(
-        'SocketManager is already booted. Call it once from quasar boot file.',
-      );
-    }
-
-    this.params = params;
+  public static boot(): void {
     // call subscribe for already created instances and connect to socket
     this.instances.forEach(instance => this.bootInstance(instance));
     // clean instances
@@ -128,7 +121,7 @@ export abstract class SocketManager implements SocketManagerContract {
       }
     });
 
-    if (DEBUG) {
+    if (DEBUG === true) {
       socket.on('connect', () => {
         console.info(`${this.namespace} [connect]`);
       });
@@ -171,5 +164,5 @@ export abstract class SocketManager implements SocketManagerContract {
   /*
    * This method should be overidden in child class to subscribe to this.socket events
    */
-  public abstract subscribe(params: any): void;
+  public abstract subscribe(): void;
 }

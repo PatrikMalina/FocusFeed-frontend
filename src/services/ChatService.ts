@@ -30,6 +30,7 @@ class ChatService {
     const chat = new ChatSocketManager(`/chats/${chatId}`);
     this.chats.set(chatId, chat);
     chat.socket.connect();
+    chat.subscribe();
     return chat;
   }
 
