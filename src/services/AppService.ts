@@ -40,9 +40,14 @@ export async function createPost(
   caption: string,
   picture: string,
   longitude: number | undefined,
-  latitude: number | undefined
+  latitude: number | undefined,
 ): Promise<AxiosResponse> {
-  return axiosInstance.post('post/create', {caption, picture, longitude, latitude});
+  return axiosInstance.post('post/create', {
+    caption,
+    picture,
+    longitude,
+    latitude,
+  });
 }
 
 export async function deletePost(id: number): Promise<AxiosResponse> {
@@ -57,12 +62,10 @@ export async function getMessages(
   chatId: number,
   paging: number = 1,
   perPage: number = 10,
-  offset: number = 0,
 ): Promise<AxiosResponse> {
   return axiosInstance.put('chat/loadMessages', {
     chatId,
     paging,
     perPage,
-    offset,
   });
 }

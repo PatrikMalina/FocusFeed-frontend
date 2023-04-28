@@ -130,20 +130,24 @@ const ChatScreen = ({route, navigation: {goBack}}: any) => {
 
     setIsRefreshing(true);
     let perPage = 5;
-    let paging = 0;
 
-    let len = messages.length;
+    const len = messages.length;
 
-    let offset = len % perPage;
+    if (len < perPage) return;
+
+    const offset = len % perPage;
 
     if (offset !== 0) perPage += offset;
 
-    paging = (len - offset) / perPage + 1;
-    offset = offset * -1;
-    getMessages(chat.id, paging, perPage, offset)
+    const paging = (len - offset) / perPage + 1;
+
+    getMessages(chat.id, paging, perPage)
       .then(res => {
         if (res.data.length < perPage) setFetching(false);
-        loadMessages(res.data, chat.id);
+
+        const offsetMessages = res.data.slice(offset);
+
+        loadMessages(offsetMessages, chat.id);
         setIsRefreshing(false);
       })
       .catch(e => {
