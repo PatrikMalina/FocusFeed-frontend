@@ -1,5 +1,11 @@
-import {View, StyleSheet, useWindowDimensions, ScrollView} from 'react-native';
-import React from 'react';
+import {
+  View,
+  StyleSheet,
+  useWindowDimensions,
+  ScrollView,
+  Alert,
+} from 'react-native';
+import React, {useState} from 'react';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {CustomTypes, Screens} from '../../util/enums';
@@ -11,18 +17,43 @@ import * as yup from 'yup';
 const SignUpScreen = ({navigation}: any) => {
   const {height} = useWindowDimensions();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const onRegister = (
     username: string,
     email: string,
     password: string,
     passwordConfirmation: string,
   ) => {
+    setIsLoading(true);
     registerUser(username, email, password, passwordConfirmation)
-      .then(res => {
+      .then(() => {
         navigation.push(Screens.SIGN_IN);
+        setIsLoading(false);
       })
       .catch(res => {
-        console.warn(res.err);
+        if (res.response.status === undefined) {
+          Alert.alert(
+            'Time out',
+            'Server is unreachable at the moment! Pleas try again later!',
+            [{text: 'OK', onPress: () => null}],
+            {cancelable: true},
+          );
+        } else if (res.response.status === 409) {
+          const errors = res.response.data.error.errors;
+
+          const errorMessage = errors
+            .map((error: {field: string; message: string}) => error.message)
+            .join('\n');
+
+          Alert.alert(
+            'REgistration error',
+            errorMessage,
+            [{text: 'OK', onPress: () => null}],
+            {cancelable: true},
+          );
+        }
+        setIsLoading(false);
       });
   };
 
@@ -111,7 +142,8 @@ const SignUpScreen = ({navigation}: any) => {
               <CustomButton
                 onPress={handleSubmit}
                 text="Register"
-                disabled={!isValid}
+                disabled={!isValid || isLoading}
+                isLoading={isLoading}
               />
             </>
           )}

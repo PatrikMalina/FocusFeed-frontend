@@ -5,6 +5,7 @@ const general: Record<string, string> = {
 
   INPUT_BORDER_COLOR: '#706f6f',
 
+  BUTTON_LOADING: '#1448f5',
   // Button colors
   BUTTON_PRIMARY: '#4182EE',
   BUTTON_PRIMARY_TEXT: 'white',

@@ -1,13 +1,20 @@
-import {Text, StyleSheet, Pressable} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import AppColors from '../../styling';
 import {CustomTypes} from '../../util/enums';
+import {TailSpin} from 'react-loading-icons';
 
 type CustomButton = {
   onPress: () => void;
   text: string;
   type?: CustomTypes;
   disabled?: boolean;
+  isLoading?: boolean;
 };
 
 const CustomButton = ({
@@ -15,18 +22,27 @@ const CustomButton = ({
   text,
   type = CustomTypes.PRIMARY,
   disabled = false,
+  isLoading = false,
 }: CustomButton) => {
   return (
-    <Pressable
+    <TouchableOpacity
       disabled={disabled}
       onPress={onPress}
       style={[
         styles.container,
         styles[`container_${type}`],
-        {opacity: disabled ? 0.3 : 1},
+        {opacity: disabled ? 0.6 : 1},
       ]}>
-      <Text style={[styles.text, styles[`text_${type}`]]}>{text}</Text>
-    </Pressable>
+      {isLoading ? (
+        <ActivityIndicator
+          color={AppColors.BUTTON_LOADING}
+          size={25}
+          style={{paddingHorizontal: 10}}
+        />
+      ) : (
+        <Text style={[styles.text, styles[`text_${type}`]]}>{text}</Text>
+      )}
+    </TouchableOpacity>
   );
 };
 

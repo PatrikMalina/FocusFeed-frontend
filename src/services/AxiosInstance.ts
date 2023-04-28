@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
     return res;
   },
   error => {
-    if (error.response.status === 401) {
+    if (error.response.status !== undefined && error.response.status === 401) {
       console.log('logout user');
       unauthorized();
       return;

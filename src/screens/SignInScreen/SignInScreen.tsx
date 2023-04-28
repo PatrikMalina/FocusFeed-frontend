@@ -1,5 +1,5 @@
-import {View, StyleSheet, useWindowDimensions} from 'react-native';
-import React from 'react';
+import {View, StyleSheet, useWindowDimensions, Alert} from 'react-native';
+import React, {useState} from 'react';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {CustomTypes, Screens} from '../../util/enums';
@@ -14,6 +14,8 @@ import * as yup from 'yup';
 function SignInScreen({navigation}: any) {
   const {setToken} = bindActionCreators(ActionCreators, useDispatch());
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const {height} = useWindowDimensions();
 
   const onForgotPassword = () => {
@@ -21,13 +23,32 @@ function SignInScreen({navigation}: any) {
   };
 
   const onLogin = async (username: string, password: string) => {
+    setIsLoading(true);
+
     loginUser(username, password)
       .then(res => {
         const token = res.data;
         setToken(token);
+        setIsLoading(false);
       })
       .catch(res => {
-        console.warn(res.error);
+        if (res.response.status === undefined) {
+          Alert.alert(
+            'Time out',
+            'Server is unreachable at the moment! Pleas try again later!',
+            [{text: 'OK', onPress: () => null}],
+            {cancelable: true},
+          );
+        } else if (res.response.status === 400) {
+          Alert.alert(
+            'Bad credentials',
+            'Credential do not match! Try again or create an account!',
+            [{text: 'OK', onPress: () => null}],
+            {cancelable: true},
+          );
+        }
+
+        setIsLoading(false);
       });
   };
 
@@ -81,7 +102,8 @@ function SignInScreen({navigation}: any) {
             <CustomButton
               onPress={handleSubmit}
               text="Login"
-              disabled={!isValid}
+              disabled={!isValid || isLoading}
+              isLoading={isLoading}
             />
           </>
         )}
