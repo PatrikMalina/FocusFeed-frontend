@@ -69,3 +69,11 @@ export async function getMessages(
     perPage,
   });
 }
+
+export async function newFriends(
+  username: string = '',
+  page: number = 1,
+  perPage: number = 10,
+) {
+  return axiosInstance.put('friends/newFriends', {username, page, perPage});
+}

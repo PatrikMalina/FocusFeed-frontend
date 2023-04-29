@@ -4,12 +4,14 @@ import userReducer from './reducers/userReducer';
 import sessionReducer from './reducers/sessionReducer';
 import messageReducer from './reducers/messageReducer';
 import chatReducer from './reducers/chatReducer';
+import friendReducer from './reducers/friendReducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
   session: sessionReducer,
   messages: messageReducer,
   chats: chatReducer,
+  friends: friendReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

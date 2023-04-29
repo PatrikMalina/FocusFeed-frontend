@@ -1,8 +1,10 @@
+import {Friend} from '../components/CustomFriends/CustomFriends';
 import {
   UserActionTypes,
   ChatActionTypes,
   MessageActionTypes,
   TokenActionTypes,
+  FriendActionTypes,
 } from './enums';
 
 export interface User {
@@ -69,6 +71,11 @@ export interface MessageActionsType {
 export interface ChatActionsType {
   type: ChatActionTypes;
   payload?: Chat[];
+}
+
+export interface FriendActionsType {
+  type: FriendActionTypes;
+  payload?: Friend[];
 }
 
 export interface Token {

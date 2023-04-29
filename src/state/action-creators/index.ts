@@ -4,10 +4,12 @@ import {
   TokenActionTypes,
   ChatActionTypes,
   MessageActionTypes,
+  FriendActionTypes,
 } from '../../util/enums';
 import {AuthToken, Chat, Message, State} from '../../util/interface';
 import {Dispatch} from 'redux';
 import store from '../store';
+import {Friend} from '../../components/CustomFriends/CustomFriends';
 
 interface UserDispatchType {
   type: UserActionTypes;
@@ -22,6 +24,11 @@ interface TokenDispatchType {
 interface ChatDispatchType {
   type: ChatActionTypes;
   payload: Chat[];
+}
+
+interface FriendDispatchType {
+  type: FriendActionTypes;
+  payload: Friend[];
 }
 
 interface MessageDispatchType {
@@ -99,6 +106,15 @@ export const setChats = (chats: Chat[]) => {
     dispatch({
       type: ChatActionTypes.SET_CHATS,
       payload: chats,
+    });
+  };
+};
+
+export const setFriends = (friends: Friend[]) => {
+  return (dispatch: Dispatch<FriendDispatchType>) => {
+    dispatch({
+      type: FriendActionTypes.SET_FRIENDS,
+      payload: friends,
     });
   };
 };

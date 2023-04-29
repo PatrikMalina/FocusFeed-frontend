@@ -4,13 +4,9 @@ import {User} from '../../util/interface';
 import {FriendshipStatus} from '../../util/enums';
 import AppColors from '../../styling';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useEffect, useState} from 'react';
-import {getFriends} from '../../services/AppService';
-import store from '../../state/store';
+import {RootState} from '../../state/store';
 import {API_URL} from '@env';
-
-const currentUser = store.getState().user;
-
+import {useSelector} from 'react-redux';
 export interface Friend {
   id: number;
   sentByUser: User;
@@ -23,6 +19,7 @@ interface FriendStatus {
 }
 
 const CustomStatus = ({friend}: FriendStatus) => {
+  const currentUser = useSelector((state: RootState) => state.user);
   const sentByMe = currentUser?.id === friend.sentByUser.id;
 
   return (
@@ -69,6 +66,9 @@ const CustomStatus = ({friend}: FriendStatus) => {
 };
 
 const CustomFriend = ({friend}: FriendStatus) => {
+  const currentUser = useSelector((state: RootState) => state.user);
+  console.log(friend);
+
   const user =
     currentUser?.id !== friend.sentByUser.id
       ? friend.sentByUser
@@ -86,21 +86,12 @@ const CustomFriend = ({friend}: FriendStatus) => {
 };
 
 const CustomFriends = () => {
-  const [friends, setFriends] = useState<Friend[]>([]);
-
-  useEffect(() => {
-    getFriends()
-      .then(res => {
-        setFriends(res.data);
-      })
-      .catch(error => {
-        console.warn(error);
-      });
-  }, []);
+  const friends: Friend[] = useSelector((state: RootState) => state.friends);
 
   return (
     <FlatList
       data={friends}
+      extraData={friends}
       renderItem={({item}) => (
         <View style={{flexDirection: 'row', height: 60, marginBottom: 20}}>
           <TouchableOpacity

@@ -20,11 +20,17 @@ import SettingsScreen from '../screens/SettingsScreen/SettingsScreen';
 import * as ActionCreators from '../state/action-creators';
 import {bindActionCreators} from 'redux';
 import ActivityService from '../services/ActivityService';
-import {checkMe, getChats, getMessages} from '../services/AppService';
+import {
+  checkMe,
+  getChats,
+  getFriends,
+  getMessages,
+} from '../services/AppService';
 import ChatScreen from '../screens/ChatScreen';
 import ChatService from '../services/ChatService';
 import {API_URL} from '@env';
 import {SocketManager} from '../services/SocketManager';
+import store from '../state/store';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -70,7 +76,7 @@ const TabScreens = () => {
 };
 
 const AppStack = () => {
-  const {setChats, setMessages, setUser} = bindActionCreators(
+  const {setChats, setMessages, setUser, setFriends} = bindActionCreators(
     ActionCreators,
     useDispatch(),
   );
@@ -107,10 +113,28 @@ const AppStack = () => {
         });
       })
       .catch(e => console.warn(e));
+
+    // Get friends
+    getFriends()
+      .then(res => {
+        setFriends(res.data);
+      })
+      .catch(error => {
+        console.warn(error);
+      });
   };
 
   useEffect(() => {
     initialization();
+
+    return () => {
+      ActivityService.disconnectSocket();
+      const chats: Chat[] = store.getState().chats;
+
+      chats.forEach(chat => {
+        ChatService.leave(chat.id);
+      });
+    };
   }, []);
 
   return (

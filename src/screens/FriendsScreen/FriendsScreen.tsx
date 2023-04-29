@@ -1,14 +1,28 @@
-import React, {useState} from 'react';
+import React, {Dispatch, SetStateAction, useState} from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 import AppColors from '../../styling';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from 'react-native-paper';
 import CustomFriends from '../../components/CustomFriends/CustomFriends';
+import CustomNewFriends from '../../components/CustomNewFriends';
 
-const CustomSearch = () => {
+const CustomSearch = ({
+  label,
+  value,
+  setValue,
+}: {
+  label: string;
+  value: string;
+  setValue: Dispatch<SetStateAction<string>>;
+}) => {
   return (
     <View style={styles.search}>
-      <TextInput placeholder="Search users" style={styles.input} />
+      <TextInput
+        value={value}
+        onChangeText={setValue}
+        placeholder={label}
+        style={styles.input}
+      />
       <MaterialIcons
         name="magnify"
         size={20}
@@ -21,7 +35,7 @@ const CustomSearch = () => {
 
 const ContactsScreen = ({navigation: {goBack}}: any) => {
   const [isYours, setIsYours] = useState(true);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState<string>('');
 
   const changeTab = () => {
     setIsYours(!isYours);
@@ -41,7 +55,11 @@ const ContactsScreen = ({navigation: {goBack}}: any) => {
           />
         </View>
 
-        <CustomSearch />
+        <CustomSearch
+          label={isYours ? 'Search Friends' : 'Search New Friends'}
+          value={searchText}
+          setValue={setSearchText}
+        />
       </View>
       <View
         style={{
@@ -68,7 +86,11 @@ const ContactsScreen = ({navigation: {goBack}}: any) => {
         </Button>
       </View>
       <View style={styles.container}>
-        {isYours ? <CustomFriends /> : <></>}
+        {isYours ? (
+          <CustomFriends />
+        ) : (
+          <CustomNewFriends username={searchText} />
+        )}
       </View>
     </>
   );
