@@ -7,7 +7,6 @@ import {
 import React from 'react';
 import AppColors from '../../styling';
 import {CustomTypes} from '../../util/enums';
-import {TailSpin} from 'react-loading-icons';
 
 type CustomButton = {
   onPress: () => void;

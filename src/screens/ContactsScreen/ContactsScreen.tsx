@@ -1,4 +1,10 @@
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,6 +16,7 @@ import {Chat} from '../../util/interface';
 import store, {RootState} from '../../state/store';
 import {formatDistance} from 'date-fns';
 import {useSelector} from 'react-redux';
+import Lottie from 'lottie-react-native';
 
 const CustomSearch = () => {
   return (
@@ -58,8 +65,20 @@ const CustomUser = ({chat}: {chat: Chat}) => {
   );
 };
 
+const EmptyChat = () => {
+  return (
+    <View style={{height: '40%'}}>
+      <Lottie
+        source={require('../../../assets/animations/empty_chat.json')}
+        autoPlay
+        loop
+      />
+    </View>
+  );
+};
+
 const ContactsScreen = ({navigation}: any) => {
-  const chats = useSelector((state: RootState) => state.chats);
+  const chats: Chat[] = useSelector((state: RootState) => state.chats);
   const messages = useSelector((state: RootState) => state.messages);
 
   return (
@@ -77,16 +96,38 @@ const ContactsScreen = ({navigation}: any) => {
         </View>
       </View>
       <View style={styles.container}>
-        <FlatList
-          data={chats}
-          extraData={[chats, messages]}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={() => navigation.push(Screens.CHAT, {chat: item})}>
-              <CustomUser chat={item} />
-            </TouchableOpacity>
-          )}
-        />
+        {chats.length < 1 ? (
+          <>
+            <EmptyChat />
+            <Text style={[styles.text, {fontWeight: 'bold', fontSize: 25}]}>
+              Nothing Here
+            </Text>
+            <Text style={styles.text}>There are no chats in your feed.</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}>
+              <Text style={styles.text}>To create some press </Text>
+              <Pressable onPress={() => navigation.push(Screens.FRIENDS)}>
+                <Text style={[styles.text, {color: AppColors.BUTTON_PRIMARY}]}>
+                  here
+                </Text>
+              </Pressable>
+            </View>
+          </>
+        ) : (
+          <FlatList
+            data={chats}
+            extraData={[chats, messages]}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                onPress={() => navigation.push(Screens.CHAT, {chat: item})}>
+                <CustomUser chat={item} />
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </View>
     </>
   );
@@ -152,5 +193,12 @@ const styles = StyleSheet.create({
   iconPerson: {
     alignSelf: 'center',
     marginHorizontal: '5%',
+  },
+
+  text: {
+    alignSelf: 'center',
+    color: AppColors.INPUT_BORDER_COLOR,
+    fontSize: 15,
+    opacity: 0.6,
   },
 });

@@ -28,6 +28,7 @@ export enum ChatActionTypes {
 export enum FriendActionTypes {
   SET_FRIENDS = 'setFriends',
   ADD_FRIENDS = 'addFriends',
+  UPDATE_FRIENDS = 'updateFriends',
 }
 
 export enum Screens {

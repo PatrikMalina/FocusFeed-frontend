@@ -1,12 +1,13 @@
 import {Avatar} from 'react-native-paper';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {User} from '../../util/interface';
-import {FriendshipStatus} from '../../util/enums';
+import {FriendActionTypes, FriendshipStatus} from '../../util/enums';
 import AppColors from '../../styling';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {RootState} from '../../state/store';
+import store, {RootState} from '../../state/store';
 import {API_URL} from '@env';
 import {useSelector} from 'react-redux';
+import ActivityService from '../../services/ActivityService';
 export interface Friend {
   id: number;
   sentByUser: User;
@@ -22,6 +23,15 @@ const CustomStatus = ({friend}: FriendStatus) => {
   const currentUser = useSelector((state: RootState) => state.user);
   const sentByMe = currentUser?.id === friend.sentByUser.id;
 
+  const updateRequest = (status: FriendshipStatus) => {
+    ActivityService.updateFriendRequest(friend.id, status).then(res => {
+      store.dispatch({
+        type: FriendActionTypes.UPDATE_FRIENDS,
+        payload: [res],
+      });
+    });
+  };
+
   return (
     <View style={{alignSelf: 'center', width: '26%'}}>
       {friend.accepted === FriendshipStatus.PENDING ? (
@@ -35,14 +45,14 @@ const CustomStatus = ({friend}: FriendStatus) => {
                 name="check"
                 size={30}
                 color="green"
-                onPress={() => console.log('accept')}
+                onPress={() => updateRequest(FriendshipStatus.ACCEPTED)}
               />
               <MaterialIcons.Button
                 backgroundColor={AppColors.DEFAULT_BACKGROUND}
                 name="close"
                 size={30}
                 color="red"
-                onPress={() => console.log('decline')}
+                onPress={() => updateRequest(FriendshipStatus.DECLINED)}
               />
             </View>
           )}
