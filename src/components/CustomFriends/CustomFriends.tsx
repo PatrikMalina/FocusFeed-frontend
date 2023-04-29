@@ -67,7 +67,6 @@ const CustomStatus = ({friend}: FriendStatus) => {
 
 const CustomFriend = ({friend}: FriendStatus) => {
   const currentUser = useSelector((state: RootState) => state.user);
-  console.log(friend);
 
   const user =
     currentUser?.id !== friend.sentByUser.id
