@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {User} from '../../util/interface';
 import {API_URL} from '@env';
 import {Avatar} from 'react-native-paper';
@@ -8,6 +15,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import ActivityService from '../../services/ActivityService';
 import store from '../../state/store';
 import {FriendActionTypes} from '../../util/enums';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
 
 const CustomUser = ({user}: {user: User}) => {
   return (
@@ -20,21 +28,6 @@ const CustomUser = ({user}: {user: User}) => {
     </View>
   );
 };
-
-function SendRequest(user: User) {
-  ActivityService.sendFriendRequest(user.id)
-    .then(res => {
-      if (res) {
-        store.dispatch({
-          type: FriendActionTypes.ADD_FRIENDS,
-          payload: [res],
-        });
-      }
-    })
-    .catch(() => {
-      console.log('tost bad');
-    });
-}
 
 const CustomNewFriends = ({username}: {username: string}) => {
   const [users, setUsers] = useState<User[]>([]);
@@ -49,6 +42,30 @@ const CustomNewFriends = ({username}: {username: string}) => {
       });
   }, [username]);
 
+  function SendRequest(user: User) {
+    ActivityService.sendFriendRequest(user.id)
+      .then(res => {
+        if (res) {
+          store.dispatch({
+            type: FriendActionTypes.ADD_FRIENDS,
+            payload: [res],
+          });
+
+          setUsers(users.filter(u => u.id !== user.id));
+          Toast.show({
+            type: 'success',
+            text1: 'Friend Request was sent successfully!',
+          });
+        }
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'Friend Request could not be sent! Try again later!',
+        });
+      });
+  }
+
   return (
     <View style={{width: '100%', height: '100%'}}>
       <SafeAreaView>
@@ -59,7 +76,24 @@ const CustomNewFriends = ({username}: {username: string}) => {
               <TouchableOpacity
                 style={{width: '100%'}}
                 key={item.id}
-                onPress={() => SendRequest(item)}>
+                onPress={() =>
+                  Alert.alert(
+                    'Friend Request',
+                    `Do you want to send a friend request to ${item.username}?`,
+                    [
+                      {
+                        text: 'No',
+                        onPress: () => null,
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Yes',
+                        onPress: () => SendRequest(item),
+                      },
+                    ],
+                    {cancelable: true},
+                  )
+                }>
                 <CustomUser user={item} />
               </TouchableOpacity>
             </View>

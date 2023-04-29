@@ -41,6 +41,10 @@ For websocket we are using [socket.io-client](https://github.com/socketio/socket
 
 Icons are using [React native vector icons](https://github.com/oblador/react-native-vector-icons)
 
+#### Notifications
+
+When the app is visible, for the notifications we are using [toast](https://github.com/calintamas/react-native-toast-message)
+
 #### Splash Screen animation
 
 For the animation library we are using [Lottie](https://github.com/lottie-react-native/lottie-react-native)
