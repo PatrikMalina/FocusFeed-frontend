@@ -22,7 +22,7 @@ const CustomInput = (props: any) => {
   const borderColor = hasError
     ? 'red'
     : isCorrect
-    ? AppColors.BUTTON_PRIMARY
+    ? 'green'
     : styles.container.borderBottomColor;
 
   return (
