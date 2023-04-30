@@ -5,6 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button} from 'react-native-paper';
 import CustomFriends from '../../components/CustomFriends/CustomFriends';
 import CustomNewFriends from '../../components/CustomNewFriends';
+import {Screens} from '../../util/enums';
 
 const CustomSearch = ({
   label,
@@ -33,7 +34,7 @@ const CustomSearch = ({
   );
 };
 
-const ContactsScreen = ({navigation: {goBack}}: any) => {
+const ContactsScreen = ({navigation}: any) => {
   const [isYours, setIsYours] = useState(true);
   const [searchText, setSearchText] = useState<string>('');
 
@@ -51,7 +52,7 @@ const ContactsScreen = ({navigation: {goBack}}: any) => {
             size={50}
             color="black"
             style={{paddingHorizontal: 0}}
-            onPress={() => goBack()}
+            onPress={() => navigation.navigate(Screens.CONTACTS)}
           />
         </View>
 
@@ -87,7 +88,7 @@ const ContactsScreen = ({navigation: {goBack}}: any) => {
       </View>
       <View style={styles.container}>
         {isYours ? (
-          <CustomFriends />
+          <CustomFriends navigation={navigation} />
         ) : (
           <CustomNewFriends username={searchText} />
         )}

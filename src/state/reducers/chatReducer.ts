@@ -10,7 +10,8 @@ const chatReducer = (state: Chat[] = [], action: ChatActionsType) => {
 
       return state;
     case ChatActionTypes.ADD_CHAT:
-      return [...state, action.payload];
+      if (action.payload === undefined) return state;
+      return [...state, ...action.payload];
 
     default:
       return state;

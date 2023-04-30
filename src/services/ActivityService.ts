@@ -1,9 +1,15 @@
 import Toast from 'react-native-toast-message';
 import {Friend} from '../components/CustomFriends/CustomFriends';
 import store from '../state/store';
-import {FriendActionTypes, FriendshipStatus} from '../util/enums';
-import {User} from '../util/interface';
+import {
+  ChatActionTypes,
+  FriendActionTypes,
+  FriendshipStatus,
+  MessageActionTypes,
+} from '../util/enums';
+import {Chat, User} from '../util/interface';
 import {SocketManager} from './SocketManager';
+import ChatService from './ChatService';
 
 class ActivitySocketManager extends SocketManager {
   public subscribe(): void {
@@ -54,6 +60,25 @@ class ActivitySocketManager extends SocketManager {
         } your friend request!`,
       });
     });
+
+    this.socket.on('createChat', (chat: Chat) => {
+      const currentUser = store.getState().user;
+
+      if (chat.user_2.id !== currentUser?.id) return;
+
+      store.dispatch({
+        type: ChatActionTypes.ADD_CHAT,
+        payload: [chat],
+      });
+
+      store.dispatch({
+        type: MessageActionTypes.SET_MESSAGES,
+        payload: [],
+        chatId: chat.id,
+      });
+
+      ChatService.join(chat.id);
+    });
   }
 
   public connectSocket() {
@@ -70,6 +95,10 @@ class ActivitySocketManager extends SocketManager {
 
   public updateFriendRequest(id: number, status: number): Promise<Friend> {
     return this.emitAsync('updateFriendRequest', id, status);
+  }
+
+  public createChat(userId: number): Promise<Chat> {
+    return this.emitAsync('createChat', userId);
   }
 }
 

@@ -165,6 +165,7 @@ const ChatScreen = ({route, navigation: {goBack}}: any) => {
         ]}>
         <FlatList
           data={messages}
+          extraData={messages}
           onEndReached={loadMore}
           onEndReachedThreshold={0.5}
           renderItem={({item}) => (

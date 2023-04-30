@@ -34,7 +34,8 @@ const CustomSearch = () => {
 
 const CustomUser = ({chat}: {chat: Chat}) => {
   const messages = useSelector((state: RootState) => state.messages);
-  const lastMessage = messages[chat.id][0];
+  const lastMessage =
+    messages[chat.id] === undefined ? undefined : messages[chat.id][0];
 
   const friend =
     chat.user_1.id !== store.getState().user?.id ? chat.user_1 : chat.user_2;
@@ -57,7 +58,7 @@ const CustomUser = ({chat}: {chat: Chat}) => {
       <View style={styles.user}>
         <Text style={styles.username}>{friend.username}</Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.lastText}>{lastMessage.content}</Text>
+          <Text style={styles.lastText}>{lastMessage?.content}</Text>
           <Text style={styles.lastSeen}>{relativeDate()}</Text>
         </View>
       </View>
@@ -108,12 +109,13 @@ const ContactsScreen = ({navigation}: any) => {
                 flexDirection: 'row',
                 justifyContent: 'center',
               }}>
-              <Text style={styles.text}>To create some press </Text>
+              <Text style={styles.text}>To create chats press </Text>
               <Pressable onPress={() => navigation.push(Screens.FRIENDS)}>
                 <Text style={[styles.text, {color: AppColors.BUTTON_PRIMARY}]}>
                   here
                 </Text>
               </Pressable>
+              <Text style={styles.text}>And select a friend</Text>
             </View>
           </>
         ) : (
