@@ -6,6 +6,7 @@ import {
   FriendActionTypes,
   FriendshipStatus,
   MessageActionTypes,
+  OnlineActionTypes,
 } from '../util/enums';
 import {Chat, User} from '../util/interface';
 import {SocketManager} from './SocketManager';
@@ -14,15 +15,24 @@ import ChatService from './ChatService';
 class ActivitySocketManager extends SocketManager {
   public subscribe(): void {
     this.socket.on('user:list', (onlineUsers: number) => {
-      console.log('user list', onlineUsers);
+      store.dispatch({
+        type: OnlineActionTypes.SET_LIST,
+        payload: onlineUsers,
+      });
     });
 
     this.socket.on('user:online', (user: User) => {
-      console.log(user, 'online');
+      store.dispatch({
+        type: OnlineActionTypes.ONLINE,
+        payload: [user.id],
+      });
     });
 
     this.socket.on('user:offline', (user: User) => {
-      console.log(user, 'offline');
+      store.dispatch({
+        type: OnlineActionTypes.OFFLINE,
+        payload: [user.id],
+      });
     });
 
     this.socket.on('friendRequest', (friend: Friend) => {

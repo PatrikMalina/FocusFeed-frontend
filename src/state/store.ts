@@ -5,6 +5,7 @@ import sessionReducer from './reducers/sessionReducer';
 import messageReducer from './reducers/messageReducer';
 import chatReducer from './reducers/chatReducer';
 import friendReducer from './reducers/friendReducer';
+import onlineReducer from './reducers/onlineReducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   messages: messageReducer,
   chats: chatReducer,
   friends: friendReducer,
+  online: onlineReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

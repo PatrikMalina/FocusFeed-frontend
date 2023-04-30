@@ -31,6 +31,12 @@ export enum FriendActionTypes {
   UPDATE_FRIENDS = 'updateFriends',
 }
 
+export enum OnlineActionTypes {
+  SET_LIST = 'setList',
+  ONLINE = 'online',
+  OFFLINE = 'offline',
+}
+
 export enum Screens {
   HOME = 'Home',
   COMMENT = 'Comment',

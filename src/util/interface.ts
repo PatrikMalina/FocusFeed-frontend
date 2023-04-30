@@ -5,6 +5,7 @@ import {
   MessageActionTypes,
   TokenActionTypes,
   FriendActionTypes,
+  OnlineActionTypes,
 } from './enums';
 
 export interface User {
@@ -76,6 +77,11 @@ export interface ChatActionsType {
 export interface FriendActionsType {
   type: FriendActionTypes;
   payload?: Friend[];
+}
+
+export interface OnlineActionsType {
+  type: OnlineActionTypes;
+  payload?: number[];
 }
 
 export interface Token {

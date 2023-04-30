@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Avatar, Text} from 'react-native-paper';
+import {Avatar, Badge, Text} from 'react-native-paper';
 import AppColors from '../../styling/AppColors';
 import {Screens} from '../../util/enums';
 import {API_URL} from '@env';
@@ -33,12 +33,15 @@ const CustomSearch = () => {
 };
 
 const CustomUser = ({chat}: {chat: Chat}) => {
+  const onlineUsers = useSelector((state: RootState) => state.online);
   const messages = useSelector((state: RootState) => state.messages);
   const lastMessage =
     messages[chat.id] === undefined ? undefined : messages[chat.id][0];
 
   const friend =
     chat.user_1.id !== store.getState().user?.id ? chat.user_1 : chat.user_2;
+
+  const isOnline = onlineUsers.includes(friend.id);
 
   const relativeDate = () => {
     if (lastMessage) {
@@ -51,14 +54,29 @@ const CustomUser = ({chat}: {chat: Chat}) => {
 
   return (
     <View style={styles.item}>
-      <Avatar.Image
-        size={60}
-        source={{uri: `${API_URL}/${friend.pictureUrl}`}}
-      />
+      <View>
+        <Avatar.Image
+          size={60}
+          source={{uri: `${API_URL}/${friend.pictureUrl}`}}
+        />
+        <Badge
+          visible={isOnline}
+          size={20}
+          style={{
+            position: 'absolute',
+            bottom: -18,
+            right: 3,
+            backgroundColor: '#76E27A',
+          }}
+        />
+      </View>
+
       <View style={styles.user}>
         <Text style={styles.username}>{friend.username}</Text>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.lastText}>{lastMessage?.content}</Text>
+          <Text numberOfLines={2} style={styles.lastText}>
+            {lastMessage?.content}
+          </Text>
           <Text style={styles.lastSeen}>{relativeDate()}</Text>
         </View>
       </View>
