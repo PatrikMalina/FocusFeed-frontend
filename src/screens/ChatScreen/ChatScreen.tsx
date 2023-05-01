@@ -5,13 +5,14 @@ import store, {RootState} from '../../state/store';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppColors from '../../styling';
 import {Avatar} from 'react-native-paper';
-import {API_URL} from '@env';
 import {useState} from 'react';
 import ChatService from '../../services/ChatService';
 import {useDispatch, useSelector} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
 import {getMessages} from '../../services/AppService';
+import {useNetInfo} from '@react-native-community/netinfo';
+import {API_URL} from '../../services/Config';
 
 const TopHeader = ({goBack, friend}: {goBack: any; friend: User}) => {
   return (
@@ -45,6 +46,15 @@ const MessageBobble = ({message, friend}: {message: Message; friend: User}) => {
   return (
     <View
       style={{marginTop: 20, flexDirection: sentByMe ? 'row-reverse' : 'row'}}>
+      {message.offline ? (
+        <MaterialIcons
+          size={20}
+          name="send-clock-outline"
+          style={{alignSelf: 'flex-end', margin: 2}}
+        />
+      ) : (
+        <></>
+      )}
       <Avatar.Image
         size={30}
         source={{
@@ -57,6 +67,7 @@ const MessageBobble = ({message, friend}: {message: Message; friend: User}) => {
         style={[
           styles.messageBobble,
           sentByMe ? styles.myBobble : styles.friendsBobble,
+          message.offline ? {opacity: 0.5} : {},
         ]}>
         <Text style={{fontSize: 16}}>{message.content}</Text>
       </View>
@@ -80,6 +91,7 @@ const InputMessage = ({setFocus, sendMessage}: any) => {
         style={styles.input}
       />
       <MaterialIcons.Button
+        disabled={message === ''}
         iconStyle={{paddingVertical: 2}}
         backgroundColor={styles.inputContainer.backgroundColor}
         name="send"
@@ -90,8 +102,6 @@ const InputMessage = ({setFocus, sendMessage}: any) => {
           if (message) {
             sendMessage(message);
             setMessage('');
-          } else {
-            console.warn('empty');
           }
         }}
       />
@@ -112,9 +122,36 @@ const ChatScreen = ({route, navigation: {goBack}}: any) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const messages = useSelector((state: RootState) => state.messages)[chat.id];
+  const [index, setIndex] = useState(0);
+  const messages = useSelector((state: RootState) => state.messages)[
+    chat.id
+  ].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
+
+  const netInfo = useNetInfo();
 
   function sendMessage(message: string) {
+    if (!netInfo.isConnected) {
+      const last: Message = messages[0];
+
+      const id = index - 1;
+
+      setIndex(id);
+
+      const msg: Message = {
+        id: id,
+        createdBy: store.getState().user!.id,
+        content: message,
+        createdAt: new Date().toString(),
+        offline: true,
+      };
+
+      addMessages(msg, chat.id);
+
+      return;
+    }
+
     ChatService.in(chat.id)
       ?.addMessage(message)
       .then(res => {
@@ -126,7 +163,7 @@ const ChatScreen = ({route, navigation: {goBack}}: any) => {
   }
 
   function loadMore() {
-    if (!fetching) return;
+    if (!fetching || !netInfo.isConnected) return;
 
     setIsRefreshing(true);
     let perPage = 5;

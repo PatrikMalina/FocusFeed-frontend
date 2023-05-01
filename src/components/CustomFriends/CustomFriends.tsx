@@ -19,10 +19,10 @@ import {
 import AppColors from '../../styling';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import store, {RootState} from '../../state/store';
-import {API_URL} from '@env';
 import {useSelector} from 'react-redux';
 import ActivityService from '../../services/ActivityService';
 import ChatService from '../../services/ChatService';
+import {API_URL} from '../../services/Config';
 
 export interface Friend {
   id: number;

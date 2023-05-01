@@ -28,9 +28,11 @@ import {
 } from '../services/AppService';
 import ChatScreen from '../screens/ChatScreen';
 import ChatService from '../services/ChatService';
-import {API_URL} from '@env';
 import {SocketManager} from '../services/SocketManager';
 import store from '../state/store';
+import NetInfo from '@react-native-community/netinfo';
+import Toast from 'react-native-toast-message';
+import {API_URL} from '../services/Config';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -76,16 +78,31 @@ const TabScreens = () => {
 };
 
 const AppStack = () => {
-  const {setChats, setMessages, setUser, setFriends} = bindActionCreators(
-    ActionCreators,
-    useDispatch(),
-  );
+  const {setChats, setMessages, setUser, setFriends, addMessages} =
+    bindActionCreators(ActionCreators, useDispatch());
+
+  const [isFirst, setIsFirst] = useState(true);
+  const [isInternetReachable, setIsInternetReachable] = useState<
+    boolean | null
+  >(false);
+
+  const chats: Chat[] = useSelector((state: RootState) => state.chats);
 
   const initialization = () => {
+    NetInfo.configure({
+      reachabilityUrl: API_URL,
+      reachabilityTest: async response => response?.status === 200,
+      reachabilityLongTimeout: 60 * 1000, // 60s
+      reachabilityShortTimeout: 2 * 1000, // 5s
+      reachabilityRequestTimeout: 5 * 1000, // 5s
+      reachabilityShouldRun: () => true,
+      useNativeReachability: false,
+    });
+
     // Get the current user information
     checkMe()
       .then(res => {
-        if (res !== undefined) {
+        if (res?.data !== undefined) {
           setUser(res.data);
         }
       })
@@ -99,6 +116,8 @@ const AppStack = () => {
     // Get all chats and messages related to the chats
     getChats()
       .then(res => {
+        if (res?.data === undefined) return;
+
         const chats: Chat[] = res.data;
         setChats(chats);
 
@@ -107,16 +126,20 @@ const AppStack = () => {
 
           getMessages(chat.id)
             .then(res => {
+              if (res?.data === undefined) return;
+
               setMessages(res.data, chat.id);
             })
             .catch(e => console.warn(e));
         });
+        setIsFirst(false);
       })
       .catch(e => console.warn(e));
 
     // Get friends
     getFriends()
       .then(res => {
+        if (res?.data === undefined) return;
         setFriends(res.data);
       })
       .catch(error => {
@@ -127,6 +150,11 @@ const AppStack = () => {
   useEffect(() => {
     initialization();
 
+    // Subscribe
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsInternetReachable(state.isInternetReachable);
+    });
+
     return () => {
       ActivityService.disconnectSocket();
       const chats: Chat[] = store.getState().chats;
@@ -134,8 +162,48 @@ const AppStack = () => {
       chats.forEach(chat => {
         ChatService.leave(chat.id);
       });
+
+      unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    if (isInternetReachable && !isFirst) {
+      chats.forEach(chat => {
+        getMessages(chat.id)
+          .then(res => {
+            if (res?.data === undefined) return;
+            setMessages(res.data, chat.id);
+          })
+          .catch(e => console.warn(e));
+
+        const offlineMessages = store
+          .getState()
+          .messages[chat.id].filter(msg => msg.offline === true)
+          .reverse();
+
+        offlineMessages.forEach(async (msg, index) => {
+          setTimeout(async () => {
+            await ChatService.in(chat.id)
+              ?.addMessage(msg.content)
+              .then(res => {
+                addMessages(res, chat.id);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          }, 1000 * (index + 1));
+        });
+      });
+    } else if (isInternetReachable === false && !isFirst) {
+      Toast.show({
+        type: 'info',
+        text1: 'The device has lost connection to the internet.',
+        text2: 'When device reconnects, it will send all un send messages.',
+        visibilityTime: 6000,
+      });
+    }
+  }, [isInternetReachable]);
 
   return (
     <Stack.Navigator

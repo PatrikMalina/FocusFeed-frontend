@@ -12,6 +12,7 @@ export interface User {
   id: number;
   username: string;
   pictureUrl: string;
+  email?: string;
 }
 
 export interface Post {
@@ -95,6 +96,7 @@ export interface Message {
   createdBy: number;
   content: string;
   createdAt: string;
+  offline?: boolean;
 }
 export interface Chat {
   id: number;

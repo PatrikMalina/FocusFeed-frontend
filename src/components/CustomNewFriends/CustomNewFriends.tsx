@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import {User} from '../../util/interface';
-import {API_URL} from '@env';
 import {Avatar} from 'react-native-paper';
 import {newFriends} from '../../services/AppService';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -16,6 +15,7 @@ import ActivityService from '../../services/ActivityService';
 import store from '../../state/store';
 import {FriendActionTypes} from '../../util/enums';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import {API_URL} from '../../services/Config';
 
 const CustomUser = ({user}: {user: User}) => {
   return (
@@ -35,7 +35,7 @@ const CustomNewFriends = ({username}: {username: string}) => {
   useEffect(() => {
     newFriends(username)
       .then(res => {
-        setUsers(res.data.data);
+        if (res.data.data) setUsers(res.data.data);
       })
       .catch(e => {
         console.warn(e);

@@ -10,12 +10,10 @@ Follow along on the this [link](https://reactnative.dev/docs/environment-setup)
 ## Setup
 
 1. Run `npm install`
-2. Create file `.env` and copy stuff from `.env.example`
+2. Edit `Config.ts` in the folder `services`
 3. Open emulator and run `npm run android` for android or `npm run ios` for iOS
 
 ## Further information
-
-Loading environment variables [react-native-dotenv](https://www.npmjs.com/package/react-native-dotenv)
 
 React Native [documentation](https://reactnative.dev/)
 
@@ -44,6 +42,10 @@ Icons are using [React native vector icons](https://github.com/oblador/react-nat
 #### Notifications
 
 When the app is visible, for the notifications we are using [toast](https://github.com/calintamas/react-native-toast-message)
+
+#### Offline
+
+For checking wifi state we are using [netinfo](https://github.com/react-native-netinfo/react-native-netinfo)
 
 #### Splash Screen animation
 
