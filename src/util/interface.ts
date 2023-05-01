@@ -95,6 +95,7 @@ export interface Message {
   createdBy: number;
   content: string;
   createdAt: string;
+  offline?: boolean;
 }
 export interface Chat {
   id: number;

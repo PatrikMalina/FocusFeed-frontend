@@ -35,7 +35,7 @@ const CustomNewFriends = ({username}: {username: string}) => {
   useEffect(() => {
     newFriends(username)
       .then(res => {
-        setUsers(res.data.data);
+        if (res.data.data) setUsers(res.data.data);
       })
       .catch(e => {
         console.warn(e);

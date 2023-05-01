@@ -45,6 +45,10 @@ Icons are using [React native vector icons](https://github.com/oblador/react-nat
 
 When the app is visible, for the notifications we are using [toast](https://github.com/calintamas/react-native-toast-message)
 
+#### Offline
+
+For checking wifi state we are using [netinfo](https://github.com/react-native-netinfo/react-native-netinfo)
+
 #### Splash Screen animation
 
 For the animation library we are using [Lottie](https://github.com/lottie-react-native/lottie-react-native)
