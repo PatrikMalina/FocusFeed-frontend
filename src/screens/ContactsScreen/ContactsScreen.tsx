@@ -11,12 +11,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Avatar, Badge, Text} from 'react-native-paper';
 import AppColors from '../../styling/AppColors';
 import {Screens} from '../../util/enums';
-import {API_URL} from '@env';
 import {Chat} from '../../util/interface';
 import store, {RootState} from '../../state/store';
 import {formatDistance} from 'date-fns';
 import {useSelector} from 'react-redux';
 import Lottie from 'lottie-react-native';
+import {API_URL} from '../../services/Config';
 
 const CustomSearch = () => {
   return (

@@ -1,4 +1,4 @@
-import {API_URL} from '@env';
+import {API_URL} from './Config';
 import axios, {AxiosResponse} from 'axios';
 
 export async function registerUser(

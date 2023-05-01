@@ -28,11 +28,11 @@ import {
 } from '../services/AppService';
 import ChatScreen from '../screens/ChatScreen';
 import ChatService from '../services/ChatService';
-import {API_URL} from '@env';
 import {SocketManager} from '../services/SocketManager';
 import store from '../state/store';
 import NetInfo from '@react-native-community/netinfo';
 import Toast from 'react-native-toast-message';
+import {API_URL} from '../services/Config';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

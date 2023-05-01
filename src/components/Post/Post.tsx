@@ -1,10 +1,10 @@
 import {View, Text, Image, TouchableOpacity, Linking} from 'react-native';
 import {Divider} from 'react-native-elements';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {likePost} from '../../services/AppService';
 import {Post} from '../../util/interface';
-import {API_URL} from '@env';
 import store from '../../state/store';
+import {API_URL} from '../../services/Config';
 
 interface Props {
   post: Post;
@@ -25,8 +25,8 @@ const Posts: React.FC<Props> = ({post}) => {
   };
 
   const openMap = () => {
-    const x = post.location?.x
-    const y = post.location?.y
+    const x = post.location?.x;
+    const y = post.location?.y;
     const url = `https://www.google.com/maps/search/?api=1&query=${y},${x}`;
     Linking.openURL(url);
   };
@@ -35,9 +35,9 @@ const Posts: React.FC<Props> = ({post}) => {
     const hasUserLikedPost = post.likes.some(
       like => like.userId == store.getState().user?.id,
     );
-    setLiked(hasUserLikedPost);   
+    setLiked(hasUserLikedPost);
   }, [post.likes]);
- 
+
   return (
     <View style={{marginBottom: 60}}>
       <Divider width={1} orientation="vertical" />
@@ -73,7 +73,12 @@ const Posts: React.FC<Props> = ({post}) => {
       </View>
 
       <View style={{marginLeft: '10%', flexDirection: 'row'}}>
-        <TouchableOpacity onPress={() => {if (!liked){handleLikePost()}}}>
+        <TouchableOpacity
+          onPress={() => {
+            if (!liked) {
+              handleLikePost();
+            }
+          }}>
           <Image
             style={{width: 30, height: 30}}
             source={{
@@ -93,13 +98,11 @@ const Posts: React.FC<Props> = ({post}) => {
           {likesCount} likes
         </Text>
       </View>
-        {post.location && (
-          <TouchableOpacity onPress={openMap} style={{marginLeft: '10%'}}>
-        <Text style={{fontWeight: '600', fontSize: 14}}>
-          Location
-        </Text>
+      {post.location && (
+        <TouchableOpacity onPress={openMap} style={{marginLeft: '10%'}}>
+          <Text style={{fontWeight: '600', fontSize: 14}}>Location</Text>
         </TouchableOpacity>
-    )}
+      )}
 
       <View style={{marginTop: 5}}>
         <Text style={{marginLeft: '10%', fontWeight: '600'}}>

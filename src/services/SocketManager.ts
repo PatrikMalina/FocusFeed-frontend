@@ -1,7 +1,7 @@
 import {Manager, Socket} from 'socket.io-client';
 import store from '../state/store';
-import {DEBUG} from '@env';
 import {unauthorized} from '../state/action-creators';
+import {DEBUG} from './Config';
 
 export interface SocketManagerContract {
   namespace: string;
@@ -109,7 +109,7 @@ export abstract class SocketManager implements SocketManagerContract {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     socket.on('connect_error', (err: Error & {data?: any}) => {
-      if (DEBUG === true) {
+      if (DEBUG) {
         console.error(
           `${this.namespace} [connect_error]`,
           err.message,
@@ -122,7 +122,7 @@ export abstract class SocketManager implements SocketManagerContract {
       }
     });
 
-    if (DEBUG === true) {
+    if (DEBUG) {
       socket.on('connect', () => {
         console.info(`${this.namespace} [connect]`);
       });

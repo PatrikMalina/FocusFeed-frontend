@@ -1,7 +1,7 @@
-import {API_URL} from '@env';
 import axios from 'axios';
 import store from '../state/store';
 import {unauthorized} from '../state/action-creators';
+import {API_URL} from './Config';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,

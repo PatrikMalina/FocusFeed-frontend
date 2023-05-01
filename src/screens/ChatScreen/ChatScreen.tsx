@@ -5,7 +5,6 @@ import store, {RootState} from '../../state/store';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppColors from '../../styling';
 import {Avatar} from 'react-native-paper';
-import {API_URL} from '@env';
 import {useState} from 'react';
 import ChatService from '../../services/ChatService';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,6 +12,7 @@ import {bindActionCreators} from 'redux';
 import * as ActionCreators from '../../state/action-creators';
 import {getMessages} from '../../services/AppService';
 import {useNetInfo} from '@react-native-community/netinfo';
+import {API_URL} from '../../services/Config';
 
 const TopHeader = ({goBack, friend}: {goBack: any; friend: User}) => {
   return (
