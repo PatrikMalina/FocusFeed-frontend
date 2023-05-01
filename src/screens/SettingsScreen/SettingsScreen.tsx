@@ -5,7 +5,9 @@ import CustomInput from '../../components/CustomInput';
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import { updateProfile } from '../../services/AppService';
 import { Screens } from '../../util/enums';
-import store from '../../state/store';
+import {Formik, Field} from 'formik';
+import * as yup from 'yup';
+import CustomButton from '../../components/CustomButton';
 
 const options: ImageLibraryOptions = {
     mediaType: 'photo',
@@ -20,11 +22,9 @@ type UpdateProfileData = {
   };
 
 const SettingsScreen = ({ navigation: {goBack}, navigation }: any) => {
-    const [newPassword, setNewPassword] = useState('');
-    const [newEmail, setNewEmail] = useState('');
-    const [newUsername, setNewUsername] = useState('');
     const [imageUri, setImageUri] = useState<string | undefined>(undefined)
     const [base64string, setBase64string] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
 
     const onUpdateProfile = (
         username: string,
@@ -51,7 +51,6 @@ const SettingsScreen = ({ navigation: {goBack}, navigation }: any) => {
             console.log();
             
             updateProfile(data).then(res => {
-                console.log(res.data)
                 navigation.push(Screens.TAB_SCREENS)
               })
               .catch(res => {
@@ -69,6 +68,20 @@ const SettingsScreen = ({ navigation: {goBack}, navigation }: any) => {
         });
       };
 
+      const validationSchema = yup.object().shape({
+        email: yup
+          .string()
+          .email('Email is not in valid format!'),
+        username: yup
+          .string()
+          .min(5, 'Username must contain at least 5 characters!')
+          .max(30, 'Username must contain less then 30 characters!'),
+        password: yup
+          .string()
+          .min(8, 'Password must contain at least 8 characters!')
+          .max(64, 'Password must contain less then 64 characters!'),
+      });
+
   return (
     <View>
     <View style={{ margin: 5 }}>
@@ -79,38 +92,60 @@ const SettingsScreen = ({ navigation: {goBack}, navigation }: any) => {
       <Text style={styles.font}>Change Profile Picture:</Text>
       <Button title="Choose Picture" onPress={ChoosePhoto} />
     </View>
-    <View style={{marginTop: 10}}>
-    <Text style={styles.font}>Change Email:</Text>
-    <CustomInput
-          placeholder="Email"
-          value={newEmail}
-          setValue={setNewEmail}
-          iconName="email-outline"
-          iconSize={30}
-        />
-    </View>
-    <View>
-      <Text style={styles.font}>Change Username:</Text>
-      <CustomInput
-          placeholder="Username"
-          value={newUsername}
-          setValue={setNewUsername}
-          iconName="account-outline"
-          iconSize={30}
-        />
-    </View>
-    <View>
-      <Text style={styles.font}>Change Password:</Text>
-      <CustomInput
-          placeholder="Password"
-          value={newPassword}
-          setValue={setNewPassword}
-          iconName="lock-outline"
-          iconSize={30}
-          isPassword
-        />
-    </View>
-    <Button title="Save Changes" onPress={() => onUpdateProfile(newUsername, newEmail, newPassword, base64string)} />
+    <Formik
+          validationSchema={validationSchema}
+          initialValues={{
+            email: '',
+            username: '',
+            password: '',
+          }}
+          validateOnChange={true}
+          validateOnBlur={true}
+          onSubmit={values =>
+            onUpdateProfile(
+              values.username,
+              values.email,
+              values.password,
+              base64string
+            )
+          }>
+          {({handleSubmit, isValid}) => (
+            <>
+            
+              <Field
+                component={CustomInput}
+                name="email"
+                placeholder="Email"
+                iconName="email-outline"
+                iconSize={30}
+              />
+
+              <Field
+                component={CustomInput}
+                name="username"
+                placeholder="Username"
+                iconName="account-outline"
+                iconSize={30}
+              />
+
+              <Field
+                component={CustomInput}
+                name="password"
+                placeholder="Password"
+                iconName="lock-outline"
+                iconSize={30}
+                isPassword
+              />
+
+              <CustomButton
+                onPress={handleSubmit}
+                text="Update"
+                disabled={!isValid || isLoading}
+                isLoading={isLoading}
+              />
+            </>
+          )}
+        </Formik>
   </View>
   </View>
   )
