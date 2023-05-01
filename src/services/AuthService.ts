@@ -18,6 +18,7 @@ export async function registerUser(
 export async function loginUser(
   username: string,
   password: string,
+  registrationToken: string
 ): Promise<AxiosResponse> {
-  return axios.post(`${API_URL}/auth/login`, {username, password});
+  return axios.post(`${API_URL}/auth/login`, {username, password, registrationToken});
 }

@@ -48,7 +48,7 @@ const Posts: React.FC<Props> = ({post}) => {
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
           <Image
             source={{uri: `${API_URL}/` + post.profilePictureUrl}}
             style={{width: 35, height: 35, borderRadius: 50, marginLeft: 6}}
@@ -98,9 +98,11 @@ const Posts: React.FC<Props> = ({post}) => {
           {likesCount} likes
         </Text>
       </View>
-      {post.location && (
-        <TouchableOpacity onPress={openMap} style={{marginLeft: '10%'}}>
-          <Text style={{fontWeight: '600', fontSize: 14}}>Location</Text>
+        {post.location && (
+          <TouchableOpacity onPress={openMap} style={{marginLeft: '10%'}}>
+        <Text style={{fontWeight: '600', fontSize: 14, textDecorationLine: 'underline'}}>
+          Location
+        </Text>
         </TouchableOpacity>
       )}
 

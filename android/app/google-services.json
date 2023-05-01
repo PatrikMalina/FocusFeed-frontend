@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1040739748546",
+    "project_id": "focusfeed-65ec3",
+    "storage_bucket": "focusfeed-65ec3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040739748546:android:9cbe04a042faa02d8bc95b",
+        "android_client_info": {
+          "package_name": "com.focusfeed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1040739748546-0dn1dk2j79uvfa66tt3uhbata6pas2d1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkyKsDIpz8_BEC-sjDIB6Iy2dpoumvy4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1040739748546-0dn1dk2j79uvfa66tt3uhbata6pas2d1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
