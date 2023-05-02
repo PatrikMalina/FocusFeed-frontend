@@ -1,3 +1,5 @@
+MTAA Finalne Odovzdanie
+
 # React Native Project
 
 ## Setting up the development environment
