@@ -42,6 +42,7 @@ Icons are using [React native vector icons](https://github.com/oblador/react-nat
 #### Notifications
 
 When the app is visible, for the notifications we are using [toast](https://github.com/calintamas/react-native-toast-message)
+When the app is not visible we are using firebase @react-native-firebase/messaging"
 
 #### Offline
 
